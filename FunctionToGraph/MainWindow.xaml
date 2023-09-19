@@ -16,9 +16,25 @@
         </Grid.ColumnDefinitions>
         <StackPanel 
             Grid.Column="0" 
-            Background="Crimson"
-            
+            Background="Bisque"
         >
+            <StackPanel 
+                Orientation="Horizontal"
+                Margin="10">
+                <TextBlock 
+                    Text="y(x)="
+                />
+                <TextBox
+                    x:FieldModifier="private"
+                    x:Name="_functionTextBox"
+                    Width="150"
+                    MaxLines="1"
+                    MaxLength="30"
+                /> 
+            </StackPanel>
+                
+            
+            
         </StackPanel>
         <GridSplitter
             Grid.Column="1"
