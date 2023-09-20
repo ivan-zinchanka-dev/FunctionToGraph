@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+        xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         xmlns:local="clr-namespace:FunctionToGraph"
         mc:Ignorable="d"
         Title="Function to graph" Height="550" Width="1000">
@@ -40,6 +41,27 @@
                 TextWrapping="Wrap"
                 TextAlignment="Justify"
             />
+            
+            <StackPanel 
+                Orientation="Horizontal"
+                Margin="10">
+                <TextBlock 
+                    Text="Graph color:"
+                />
+                <Button
+                    Width="100"
+                    Margin="10 0 0 0"
+                    Background="Red"
+                    
+                    Click="OnGraphColorButtonClick"
+                >
+                    
+                </Button>
+            </StackPanel>
+            
+            
+            
+            
             
             
         </StackPanel>

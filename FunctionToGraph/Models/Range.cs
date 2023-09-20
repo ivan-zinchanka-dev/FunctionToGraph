@@ -36,15 +36,8 @@ public struct Range
         {
             values.Add(values[i - 1] + delta);
         }
-
-        foreach (var v in values)
-        {
-            Console.WriteLine(v);
-        }
         
         return values;
-        
-        
     }
 
 }

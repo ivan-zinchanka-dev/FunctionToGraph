@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using FunctionToGraph.Models;
+using FunctionToGraph.Views;
 using Color = System.Drawing.Color;
 using Expression = NCalc.Expression;
 using Range = FunctionToGraph.Models.Range;
@@ -93,6 +94,12 @@ namespace FunctionToGraph
 
             return Convert.ToDouble(expression.Evaluate());
             
+        }
+
+        private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
+        {
+            GraphColorWindow graphColorWindow = new GraphColorWindow();
+            graphColorWindow.Show();
         }
     }
 }
