@@ -6,12 +6,13 @@ using System.Windows.Controls;
 using FunctionToGraph.Models;
 using Color = System.Drawing.Color;
 using Expression = NCalc.Expression;
+using Range = FunctionToGraph.Models.Range;
 
 namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
-        private IntegerRange _plotRange = new IntegerRange(-10, 10);
+        private Range _plotRange = new Range(-10, 10, 60);
         private const char XChar = 'x';
         
         public MainWindow()
@@ -34,7 +35,7 @@ namespace FunctionToGraph
             
             try
             {
-                double[] xValues = _plotRange.Generate().Select(x => (double)x).ToArray();
+                double[] xValues = _plotRange.Generate().ToArray();
                 double[] yValues = new double[xValues.Length];
 
                 for (int i = 0; i < yValues.Length; i++)
