@@ -30,9 +30,16 @@
                     Width="150"
                     MaxLines="1"
                     MaxLength="30"
+                    TextChanged="OnFunctionTextChanged"
                 /> 
             </StackPanel>
                 
+            <TextBlock 
+                Text="Enter the function in the field. Use the 'x' to represent an unknown variable. You will see a graph if there are no errors in the notation."
+                Margin="10"
+                TextWrapping="Wrap"
+                TextAlignment="Justify"
+            />
             
             
         </StackPanel>
@@ -44,7 +51,7 @@
             ></GridSplitter>
         <scottPlot:WpfPlot
             Grid.Column="2"
-            x:Name="WpfPlot1" 
+            x:Name="_plot" 
             
             />
     </Grid>
