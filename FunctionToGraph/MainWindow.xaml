@@ -6,8 +6,13 @@
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         xmlns:local="clr-namespace:FunctionToGraph"
+        xmlns:models="clr-namespace:FunctionToGraph.Models"
         mc:Ignorable="d"
         Title="Function to graph" Height="550" Width="1000">
+    
+    <Window.Resources>
+        <models:FunctionGrapher x:Key="function_grapher" />
+    </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,8 +36,13 @@
                     Width="150"
                     MaxLines="1"
                     MaxLength="30"
+                    
                     TextChanged="OnFunctionTextChanged"
-                /> 
+                    
+                />
+                
+                <!--Text = "{Binding Source={ StaticResource function_grapher}, Path=Function, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
+                
             </StackPanel>
                 
             <TextBlock 

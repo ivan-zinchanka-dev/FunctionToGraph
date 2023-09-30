@@ -15,6 +15,8 @@ namespace FunctionToGraph
     {
         private Range _plotRange = new Range(-10, 10, 60);
         private const char XChar = 'x';
+
+        private FunctionGrapher _functionGrapher;
         
         public MainWindow()
         {
@@ -27,6 +29,9 @@ namespace FunctionToGraph
             _plot.Plot.Title("Graph");
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
+
+            _functionGrapher = (FunctionGrapher)Resources["function_grapher"];
+            
         }
 
         private void OnFunctionTextChanged(object sender, TextChangedEventArgs args)
