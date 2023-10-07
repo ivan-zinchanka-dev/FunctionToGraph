@@ -22,23 +22,15 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <!--<Setter Property="Background" 
-                            Value="{Binding Source={StaticResource ColorPickerBrush}}"
-                            TargetName="Border" />-->
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
         
-        <!--"{Binding Source={StaticResource GraphColor},
-        Converter={StaticResource ColorToBrushConverter}}"-->
-        
         <Style x:Key="ColorPicker" TargetType="Button">
             <Style.Setters>
-                <!--<Setter Property="Background" Value="Red"/>-->
                 <Setter Property="DataContext" Value="{DynamicResource GraphColor}"/>
                 <Setter Property="Background" Value="{Binding Converter={StaticResource ColorToBrushConverter}}"/>
                 <Setter Property="Template" Value="{StaticResource ColorPickerTemplate}"/>
-                
             </Style.Setters>
         </Style>
         
@@ -72,12 +64,10 @@
                     
                 />
                 
-                <!--Text = "{Binding Source={ StaticResource function_grapher}, Path=Function, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"-->
-                
             </StackPanel>
                 
             <TextBlock 
-                Text="Enter the function in the field. Use the 'x' to represent an unknown variable. You will see a graph if there are no errors in the notation."
+                Text="{StaticResource Tutorial}"
                 Margin="10"
                 TextWrapping="Wrap"
                 TextAlignment="Justify"

@@ -9,10 +9,5 @@ namespace FunctionToGraph
     {
         public ResourceDictionary LogicalResources => Resources.MergedDictionaries[0];
         
-        public void Lf()
-        {
-            //LogicalResources
-        }
-
     }
 }

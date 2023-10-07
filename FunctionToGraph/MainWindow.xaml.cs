@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using FunctionToGraph.Models;
 using FunctionToGraph.Views;
 using Color = System.Drawing.Color;
@@ -21,7 +22,6 @@ namespace FunctionToGraph
         public MainWindow()
         {
             InitializeComponent();
-            
             
             //Expression exp = new Expression("Sqrt(25)");
             //Console.WriteLine(Convert.ToDouble(exp.Evaluate()));

@@ -9,7 +9,6 @@ public struct Range
 {
     public double Start { get; private set; }
     public double End { get; private set; }
-
     public int Count { get; private set; }
 
     public Range(double start, double end, int count)
@@ -27,9 +26,7 @@ public struct Range
     public IEnumerable<double> Generate()
     {
         List<double> values = new List<double>(Count + 1);
-
         double delta = (End - Start) / Count;
-
         values.Add(Start);
         
         for (int i = 1; i < Count + 1; i++)
