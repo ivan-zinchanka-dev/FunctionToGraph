@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="GraphColorWindow" Height="410" Width="290">
     <StackPanel>
-        <colorpicker:StandardColorPicker x:Name="main" />
-        <colorpicker:PortableColorPicker ColorState="{Binding ElementName=main, Path=ColorState, Mode=TwoWay}"/>
+        <colorpicker:StandardColorPicker x:FieldModifier="private" x:Name="_colorPicker" ColorChanged="OnColorChanged" />
+        <!--<colorpicker:PortableColorPicker ColorState="{Binding ElementName=main, Path=ColorState, Mode=TwoWay}"/>-->
     </StackPanel>
 </Window>
