@@ -4,5 +4,6 @@
     
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
     <Color x:Key="GraphColor"/>
+    <SolidColorBrush x:Key="GraphSolidColorBrush" Color="{Binding Source= {StaticResource GraphColor}}"/>
     
 </ResourceDictionary>

@@ -13,13 +13,6 @@
     <Window.Resources>
         <models:FunctionGrapher x:Key="function_grapher" />
         
-        <SolidColorBrush x:Key="ColorPickerBrush" Color="{DynamicResource GraphColor}">
-            
-        </SolidColorBrush>
-        
-        <FrameworkElement x:Key="ColorPickerElement" 
-                          DataContext="{DynamicResource GraphColor}"/>
-        
         <ControlTemplate TargetType="Button" x:Key="ColorPickerTemplate">
             <Border x:Name="Border" 
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -29,9 +22,9 @@
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" 
+                    <!--<Setter Property="Background" 
                             Value="{Binding Source={StaticResource ColorPickerBrush}}"
-                            TargetName="Border" />
+                            TargetName="Border" />-->
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -41,9 +34,11 @@
         
         <Style x:Key="ColorPicker" TargetType="Button">
             <Style.Setters>
-                <Setter Property="Background" Value="Red"/>
-                <Setter Property="Template" Value="{StaticResource ColorPickerTemplate}">
-                </Setter>
+                <!--<Setter Property="Background" Value="Red"/>-->
+                <Setter Property="DataContext" Value="{DynamicResource GraphColor}"/>
+                <Setter Property="Background" Value="{Binding Converter={StaticResource ColorToBrushConverter}}"/>
+                <Setter Property="Template" Value="{StaticResource ColorPickerTemplate}"/>
+                
             </Style.Setters>
         </Style>
         
@@ -98,18 +93,17 @@
                     Width="100"
                     Margin="10 0 0 0"
                     Style="{StaticResource ColorPicker}"
-                    
                     Click="OnGraphColorButtonClick"
-                    
-                    
                 >
+                    
+                    <!--DataContext="{DynamicResource GraphColor}"
+                    Background="{Binding Converter={StaticResource ColorToBrushConverter} }"-->
                     
                 </Button>
                 
             </StackPanel>
             
-            <Button Height="10" DataContext="{DynamicResource GraphColor}" 
-                    Background="{Binding Converter={StaticResource ColorToBrushConverter} }"></Button>
+            
             
             <!--<Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Height="50" HorizontalContentAlignment="Left" BorderBrush="{x:Null}" Foreground="{x:Null}" Margin="50,0,0,0">
                 <Button.Style>
