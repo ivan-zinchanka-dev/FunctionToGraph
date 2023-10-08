@@ -6,7 +6,8 @@
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         xmlns:local="clr-namespace:FunctionToGraph.Views"
         mc:Ignorable="d"
-        Title="GraphColorWindow" Height="410" Width="290">
+        Title="GraphColorWindow" Height="410" Width="290"
+        WindowStartupLocation="Manual" Top="200" Left="800">
     <StackPanel>
         <colorpicker:StandardColorPicker x:FieldModifier="private" x:Name="_colorPicker" ColorChanged="OnColorChanged" />
         <!--<colorpicker:PortableColorPicker ColorState="{Binding ElementName=main, Path=ColorState, Mode=TwoWay}"/>-->

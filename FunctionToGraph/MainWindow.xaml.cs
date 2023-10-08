@@ -38,6 +38,7 @@ namespace FunctionToGraph
 
             AppResources.OnGraphColorCahnged += OnGraphColorChanged;
 
+            
         }
 
         private void OnGraphColorChanged(Color color)
