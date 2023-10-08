@@ -25,6 +25,8 @@ namespace FunctionToGraph
         {
             InitializeComponent();
             
+            Closed += OnWindowClosed;
+            
             //Expression exp = new Expression("Sqrt(25)");
             //Console.WriteLine(Convert.ToDouble(exp.Evaluate()));
             
@@ -32,9 +34,22 @@ namespace FunctionToGraph
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
 
-            _functionGrapher = (FunctionGrapher)Resources["function_grapher"];
+            //_functionGrapher = (FunctionGrapher)Resources["function_grapher"];
+
+            AppResources.OnGraphColorCahnged += OnGraphColorChanged;
+
+        }
+
+        private void OnGraphColorChanged(Color color)
+        {
+            Console.WriteLine("Scatter");
+            
+            //_plot.Plot.Scatter();
+            
+            OnFunctionTextChanged(null, null);
             
         }
+
 
         private void OnFunctionTextChanged(object sender, TextChangedEventArgs args)
         {
@@ -107,6 +122,12 @@ namespace FunctionToGraph
         {
             GraphColorWindow graphColorWindow = new GraphColorWindow();
             graphColorWindow.Show();
+        }
+        
+        private void OnWindowClosed(object sender, EventArgs args)
+        {
+            AppResources.OnGraphColorCahnged -= OnGraphColorChanged;
+            Closed -= OnWindowClosed;
         }
     }
 }

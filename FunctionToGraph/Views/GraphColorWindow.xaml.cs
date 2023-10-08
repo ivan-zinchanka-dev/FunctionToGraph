@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using FunctionToGraph.Resources.Logical;
 
@@ -9,6 +10,7 @@ public partial class GraphColorWindow : Window
     public GraphColorWindow()
     {
         InitializeComponent();
+        Console.WriteLine(nameof(GraphColorWindow));
     }
 
     private void OnColorChanged(object sender, RoutedEventArgs e)
