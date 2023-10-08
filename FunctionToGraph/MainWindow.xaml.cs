@@ -4,9 +4,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
+using FunctionToGraph.Resources.Logical;
 using FunctionToGraph.Views;
-using Color = System.Drawing.Color;
+using Color = System.Windows.Media.Color;
 using Expression = NCalc.Expression;
 using Range = FunctionToGraph.Models.Range;
 
@@ -60,13 +62,13 @@ namespace FunctionToGraph
                 }
                 
                 _plot.Plot.Clear();
-                _plot.Plot.AddScatter(xValues, yValues, Color.Red);
+                _plot.Plot.AddScatter(xValues, yValues, AppResources.GraphColor.ToDotNetColor());
                 _plot.Refresh();
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error");
+                Console.WriteLine(ex);
             }
         }
 

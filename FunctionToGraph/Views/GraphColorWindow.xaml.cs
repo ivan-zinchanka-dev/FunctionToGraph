@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using ColorPicker.Models;
+using FunctionToGraph.Resources.Logical;
 
 namespace FunctionToGraph.Views;
 
@@ -14,8 +14,6 @@ public partial class GraphColorWindow : Window
     private void OnColorChanged(object sender, RoutedEventArgs e)
     {
         Color selectedColor = _colorPicker.SelectedColor;
-        
-        App app = (App)Application.Current;
-        app.LogicalResources["GraphColor"] = selectedColor;
+        AppResources.GraphColor = selectedColor;
     }
 }
