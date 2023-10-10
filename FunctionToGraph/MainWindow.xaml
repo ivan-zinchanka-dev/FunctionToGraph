@@ -11,7 +11,7 @@
         Title="Function to graph" Height="550" Width="1000">
     
     <Window.Resources>
-        <models:Function x:Key="Function" />
+        <models:Function x:Key="Function" ExpressionString="Pow(x, 2)-10" />
         
         <ControlTemplate TargetType="Button" x:Key="ColorPickerTemplate">
             <Border x:Name="Border" 

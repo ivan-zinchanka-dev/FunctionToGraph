@@ -10,33 +10,26 @@ namespace FunctionToGraph.Models;
 
 public class Function : IDataErrorInfo
 {
+    private const char XChar = 'x';
+    private const string IncorrectExpressionMessage = "Incorrect expression";
+    
     private Range _plotRange = new Range(-10, 10, 60);
     
-    private const char XChar = 'x';
-    
-    public string Error { get; }
-
     public string ExpressionString { get; set; }
-
     public double[] XValues { get; private set; }
     public double[] YValues { get; private set; }
 
-    public event Action<Function, bool> OnValidationCheck; 
-
+    public event Action<Function, bool> OnValidationCheck;
+    public string Error => string.Empty;
+    
     public string this[string columnName]
     {
         get
         {
-            Console.WriteLine("Column:" + columnName);
-            
             if (columnName == nameof(ExpressionString))
             {
-
-                //ExpressionString += "_";
-                
                 try
                 {
-
                     CorrectExpressionIfNeed();
                     
                     XValues = _plotRange.Generate().ToArray();
@@ -49,24 +42,18 @@ public class Function : IDataErrorInfo
                         if (result == null)
                         {
                             FireOnValidationCheck(false);
-                            return "Incorrect expression.";
+                            return IncorrectExpressionMessage;
                         }
 
                         YValues[i] = result.Value;
-                    
                     }
 
                 }
                 catch (Exception ex)
                 {
                     FireOnValidationCheck(false);
-                    return "Incorrect expression.";
+                    return IncorrectExpressionMessage;
                 }
-                
-                
-                /*Console.WriteLine("ExpressionString");
-
-                return "Incorrect expression.";*/
             }
             
             FireOnValidationCheck(true);
@@ -79,7 +66,7 @@ public class Function : IDataErrorInfo
     {
         for (int i = 1; i < ExpressionString.Length; i++)
         {
-            if (ExpressionString[i] == XChar && IsAsciiDigit(ExpressionString[i - 1]))
+            if (ExpressionString[i] == XChar && IsAsciiDigitOrX(ExpressionString[i - 1]))
             {
                 ExpressionString = ExpressionString.Insert(i, "*");
             }
@@ -88,15 +75,12 @@ public class Function : IDataErrorInfo
             {
                 ExpressionString = ExpressionString.Insert(i, "1*");
             }
-            
         }
-        
     }
     
-
-    private static bool IsAsciiDigit(char symbol)
+    private static bool IsAsciiDigitOrX(char symbol)
     {
-        return char.IsAscii(symbol) && char.IsDigit(symbol);
+        return symbol == XChar || char.IsAscii(symbol) && char.IsDigit(symbol);
     }
 
     private void FireOnValidationCheck(bool validationResult)
@@ -106,24 +90,23 @@ public class Function : IDataErrorInfo
 
     private double? GetY(double x)
     {
-            
         string expressionString = ExpressionString;
 
         if (string.IsNullOrEmpty(expressionString))
         {
             return null;
         }
-
-        int xIndex = expressionString.IndexOf(XChar);
-            
-        if (xIndex != -1)
+        
+        for (int i = 0; i < expressionString.Length; i++)
         {
-            expressionString = expressionString.Insert(xIndex + 1, x.ToString(CultureInfo.InvariantCulture));
-            expressionString = expressionString.Remove(xIndex, 1);
+            if (expressionString[i] == XChar)
+            {
+                expressionString = expressionString
+                    .Remove(i, 1)
+                    .Insert(i, x.ToString(CultureInfo.InvariantCulture));
+            }
         }
-            
-        Console.WriteLine("exp: " + expressionString);
-            
+        
         Expression expression = new Expression(expressionString);
 
         if (expression.HasErrors())
@@ -132,6 +115,5 @@ public class Function : IDataErrorInfo
         }
 
         return Convert.ToDouble(expression.Evaluate());
-            
     }
 }
