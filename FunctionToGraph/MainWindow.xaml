@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         xmlns:models="clr-namespace:FunctionToGraph.Models"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="Function to graph" Height="550" Width="1000">
     
@@ -75,6 +76,16 @@
                     Click="OnGraphColorButtonClick"
                 />
             </StackPanel>
+            
+            <TextBlock Margin="10" Text="Fixed graphs"/>
+            <ScrollViewer Margin="10" Height="100" VerticalScrollBarVisibility="Auto">
+                <ListBox x:FieldModifier="private" x:Name="_graphsListView">
+                    
+                </ListBox>
+            </ScrollViewer>
+            
+            
+            
         </StackPanel>
         
         <GridSplitter

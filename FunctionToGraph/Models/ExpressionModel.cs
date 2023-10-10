@@ -14,6 +14,8 @@ public class ExpressionModel : IDataErrorInfo
     private Range _plotRange = new Range(-10, 10, 160);
     
     public string ExpressionString { get; set; }
+    public string FullExpressionString => "y=" + ExpressionString;
+    
     public double[] XValues { get; private set; }
     public double[] YValues { get; private set; }
 

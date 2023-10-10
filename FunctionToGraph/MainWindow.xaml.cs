@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Resources.Logical;
 using FunctionToGraph.Views;
+using ScottPlot;
 using Color = System.Windows.Media.Color;
 
 namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
-        private ExpressionModel _expressionModel;
-        
+        private readonly ExpressionModel _expressionModel;
+        private readonly ObservableCollection<GraphModel> _fixedGraphModels = new ObservableCollection<GraphModel>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,6 +23,20 @@ namespace FunctionToGraph
             Loaded += OnWindowLoaded;
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
+
+            _fixedGraphModels.Add(new GraphModel()
+            {
+                ExpressionString = "2*x",
+                Color = System.Drawing.Color.Aqua,
+            });
+            
+            _fixedGraphModels.Add(new GraphModel()
+            {
+                ExpressionString = "Sin(x)",
+                Color = System.Drawing.Color.Chocolate,
+            });
+            
+            _graphsListView.ItemsSource = _fixedGraphModels;
         }
 
         private void OnWindowLoaded(object sender, EventArgs args)
@@ -30,7 +47,7 @@ namespace FunctionToGraph
             
             _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
             AppResources.OnGraphColorCahnged += OnGraphColorChanged;
-
+            
             RedrawScatterPlot();
         }
 
@@ -38,7 +55,10 @@ namespace FunctionToGraph
         {
             _plot.Plot.Clear();
             _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
-                AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f);
+                AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
+                LineStyle.Solid, _expressionModel.FullExpressionString);
+
+            _plot.Plot.Legend();
             _plot.Refresh();
         }
         
@@ -53,10 +73,6 @@ namespace FunctionToGraph
             if (validationResult)
             {
                 RedrawScatterPlot();
-            }
-            else
-            {
-                ClearScatterPlot();
             }
         }
 
