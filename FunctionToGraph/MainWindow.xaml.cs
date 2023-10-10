@@ -1,67 +1,68 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Resources.Logical;
 using FunctionToGraph.Views;
 using Color = System.Windows.Media.Color;
-using Expression = NCalc.Expression;
-using Range = FunctionToGraph.Models.Range;
 
 namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
-        private Range _plotRange = new Range(-10, 10, 60);
-        private const char XChar = 'x';
-
-        private Function _function;
+        private ExpressionModel _expressionModel;
         
         public MainWindow()
         {
             InitializeComponent();
             
             Closed += OnWindowClosed;
+            Loaded += OnWindowLoaded;
             
-            //Expression exp = new Expression("Sqrt(25)");
-            //Console.WriteLine(Convert.ToDouble(exp.Evaluate()));
-            
+            _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
+        }
+
+        private void OnWindowLoaded(object sender, EventArgs args)
+        {
             _plot.Plot.Title("Graph");
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
-
-            _function = (Function)Resources["Function"];
-
-            _function.OnValidationCheck += OnExpressionValidationCheck;
-            AppResources.OnGraphColorCahnged += OnGraphColorChanged;
             
+            _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
+            AppResources.OnGraphColorCahnged += OnGraphColorChanged;
+
+            RedrawScatterPlot();
         }
 
-        private void OnExpressionValidationCheck(Function function, bool validationResult)
+        private void RedrawScatterPlot()
+        {
+            _plot.Plot.Clear();
+            _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
+                AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f);
+            _plot.Refresh();
+        }
+        
+        private void ClearScatterPlot()
+        {
+            _plot.Plot.Clear();
+            _plot.Refresh();
+        }
+
+        private void OnExpressionValidationCheck(ExpressionModel expressionModel, bool validationResult)
         {
             if (validationResult)
             {
-                _plot.Plot.Clear();
-                _plot.Plot.AddSignal(function.YValues, 1, AppResources.GraphColor.ToDotNetColor());
-                _plot.Refresh();
+                RedrawScatterPlot();
             }
             else
             {
-                _plot.Plot.Clear();
-                _plot.Refresh();
+                ClearScatterPlot();
             }
-            
         }
 
         private void OnGraphColorChanged(Color color)
         {
-            _plot.Plot.Clear();
-            _plot.Plot.AddSignal(_function.YValues, 1, AppResources.GraphColor.ToDotNetColor());
-            _plot.Refresh();
+            RedrawScatterPlot();
         }
         
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
@@ -72,8 +73,10 @@ namespace FunctionToGraph
         
         private void OnWindowClosed(object sender, EventArgs args)
         {
-            _function.OnValidationCheck -= OnExpressionValidationCheck;
+            _expressionModel.OnValidationCheck -= OnExpressionValidationCheck;
             AppResources.OnGraphColorCahnged -= OnGraphColorChanged;
+            
+            Loaded -= OnWindowLoaded;
             Closed -= OnWindowClosed;
         }
     }

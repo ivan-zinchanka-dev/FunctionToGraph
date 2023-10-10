@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using NCalc;
 
 namespace FunctionToGraph.Models;
 
-public class Function : IDataErrorInfo
+public class ExpressionModel : IDataErrorInfo
 {
     private const char XChar = 'x';
     private const string IncorrectExpressionMessage = "Incorrect expression";
     
-    private Range _plotRange = new Range(-10, 10, 60);
+    private Range _plotRange = new Range(-10, 10, 160);
     
     public string ExpressionString { get; set; }
     public double[] XValues { get; private set; }
     public double[] YValues { get; private set; }
 
-    public event Action<Function, bool> OnValidationCheck;
+    public event Action<ExpressionModel, bool> OnValidationCheck;
     public string Error => string.Empty;
     
     public string this[string columnName]
