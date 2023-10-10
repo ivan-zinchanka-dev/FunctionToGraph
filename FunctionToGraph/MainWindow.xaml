@@ -11,7 +11,7 @@
         Title="Function to graph" Height="550" Width="1000">
     
     <Window.Resources>
-        <models:FunctionGrapher x:Key="function_grapher" />
+        <models:Function x:Key="Function" />
         
         <ControlTemplate TargetType="Button" x:Key="ColorPickerTemplate">
             <Border x:Name="Border" 
@@ -60,9 +60,20 @@
                     MaxLines="1"
                     MaxLength="30"
                     
-                    TextChanged="OnFunctionTextChanged"
+                    DataContext="{StaticResource Function}"
                     
-                />
+                    Text = "{Binding ExpressionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                    
+                    >
+                    <!--<TextBox.Text>
+                        <Binding Path="ExpressionString" NotifyOnValidationError="True">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>-->
+                    
+                </TextBox>
                 
             </StackPanel>
                 

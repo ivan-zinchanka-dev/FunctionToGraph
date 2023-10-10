@@ -19,7 +19,7 @@ namespace FunctionToGraph
         private Range _plotRange = new Range(-10, 10, 60);
         private const char XChar = 'x';
 
-        private FunctionGrapher _functionGrapher;
+        private Function _function;
         
         public MainWindow()
         {
@@ -34,91 +34,36 @@ namespace FunctionToGraph
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
 
-            //_functionGrapher = (FunctionGrapher)Resources["function_grapher"];
+            _function = (Function)Resources["Function"];
 
+            _function.OnValidationCheck += OnExpressionValidationCheck;
             AppResources.OnGraphColorCahnged += OnGraphColorChanged;
+            
+        }
 
+        private void OnExpressionValidationCheck(Function function, bool validationResult)
+        {
+            if (validationResult)
+            {
+                _plot.Plot.Clear();
+                _plot.Plot.AddSignal(function.YValues, 1, AppResources.GraphColor.ToDotNetColor());
+                _plot.Refresh();
+            }
+            else
+            {
+                _plot.Plot.Clear();
+                _plot.Refresh();
+            }
             
         }
 
         private void OnGraphColorChanged(Color color)
         {
-            Console.WriteLine("Scatter");
-            
-            //_plot.Plot.Scatter();
-            
-            OnFunctionTextChanged(null, null);
-            
+            _plot.Plot.Clear();
+            _plot.Plot.AddSignal(_function.YValues, 1, AppResources.GraphColor.ToDotNetColor());
+            _plot.Refresh();
         }
-
-
-        private void OnFunctionTextChanged(object sender, TextChangedEventArgs args)
-        {
-            
-            // Sqrt(25), Pow(4,2), Log(2,4)
-            
-            try
-            {
-                double[] xValues = _plotRange.Generate().ToArray();
-                double[] yValues = new double[xValues.Length];
-
-                for (int i = 0; i < yValues.Length; i++)
-                {
-                    double? result = GetY(xValues[i]);
-
-                    if (result == null)
-                    {
-                        _plot.Plot.Clear();
-                        _plot.Refresh();
-                        return;
-                    }
-
-                    yValues[i] = result.Value;
-                    
-                }
-                
-                _plot.Plot.Clear();
-                _plot.Plot.AddScatter(xValues, yValues, AppResources.GraphColor.ToDotNetColor());
-                _plot.Refresh();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
-        private double? GetY(double x)
-        {
-            
-            string expressionString = _functionTextBox.Text;
-
-            if (string.IsNullOrEmpty(expressionString))
-            {
-                return null;
-            }
-
-            int xIndex = expressionString.IndexOf(XChar);
-            
-            if (xIndex != -1)
-            {
-                expressionString = expressionString.Insert(xIndex + 1, x.ToString(CultureInfo.InvariantCulture));
-                expressionString = expressionString.Remove(xIndex, 1);
-            }
-            
-            //Console.WriteLine("exp: " + expressionString);
-            
-            Expression expression = new Expression(expressionString);
-
-            if (expression.HasErrors())
-            {
-                return null;
-            }
-
-            return Convert.ToDouble(expression.Evaluate());
-            
-        }
-
+        
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
         {
             GraphColorWindow graphColorWindow = new GraphColorWindow();
@@ -127,6 +72,7 @@ namespace FunctionToGraph
         
         private void OnWindowClosed(object sender, EventArgs args)
         {
+            _function.OnValidationCheck -= OnExpressionValidationCheck;
             AppResources.OnGraphColorCahnged -= OnGraphColorChanged;
             Closed -= OnWindowClosed;
         }
