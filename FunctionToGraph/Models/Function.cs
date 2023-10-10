@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using NCalc;
@@ -34,6 +36,9 @@ public class Function : IDataErrorInfo
                 
                 try
                 {
+
+                    CorrectExpressionIfNeed();
+                    
                     XValues = _plotRange.Generate().ToArray();
                     YValues = new double[XValues.Length];
 
@@ -70,6 +75,30 @@ public class Function : IDataErrorInfo
         }
     }
 
+    private void CorrectExpressionIfNeed()
+    {
+        for (int i = 1; i < ExpressionString.Length; i++)
+        {
+            if (ExpressionString[i] == XChar && IsAsciiDigit(ExpressionString[i - 1]))
+            {
+                ExpressionString = ExpressionString.Insert(i, "*");
+            }
+            
+            if (ExpressionString[i] == XChar && ExpressionString[i - 1] == '-')
+            {
+                ExpressionString = ExpressionString.Insert(i, "1*");
+            }
+            
+        }
+        
+    }
+    
+
+    private static bool IsAsciiDigit(char symbol)
+    {
+        return char.IsAscii(symbol) && char.IsDigit(symbol);
+    }
+
     private void FireOnValidationCheck(bool validationResult)
     {
         OnValidationCheck?.Invoke(this, validationResult);
@@ -93,7 +122,7 @@ public class Function : IDataErrorInfo
             expressionString = expressionString.Remove(xIndex, 1);
         }
             
-        //Console.WriteLine("exp: " + expressionString);
+        Console.WriteLine("exp: " + expressionString);
             
         Expression expression = new Expression(expressionString);
 
