@@ -96,13 +96,13 @@ namespace FunctionToGraph
         {
             if (_expressionModel.IsValidated)
             {
-                //GraphModel equalModel = _fixedGraphModels.FirstOrDefault(model => model.Expression == _expressionModel.ExpressionString);
+                GraphModel equalModel = _fixedGraphModels.FirstOrDefault(model => model.Expression == _expressionModel.ExpressionString);
 
-                /*if (equalModel == default)
-                {*/
+                if (equalModel == default)
+                {
                     _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
                         _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
-                //}
+                }
             }
         }
 
