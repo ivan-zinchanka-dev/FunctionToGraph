@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -31,7 +30,7 @@ namespace FunctionToGraph
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
-            StorageUtility.ReadGraphModels().ContinueWith(task =>
+            StorageUtility.ReadGraphModelsAsync().ContinueWith(task =>
             {
                 _fixedGraphModels = new ObservableCollection<GraphModel>(task.Result);
                 _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
@@ -49,7 +48,7 @@ namespace FunctionToGraph
         
         private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            StorageUtility.SaveGraphModels(_fixedGraphModels);
+            StorageUtility.SaveGraphModelsAsync(_fixedGraphModels);
         }
         
         private void RedrawScatterPlot()
@@ -95,12 +94,15 @@ namespace FunctionToGraph
         
         private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(_fixedGraphModels.Count);
-            
             if (_expressionModel.IsValidated)
             {
-                _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
-                    _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
+                //GraphModel equalModel = _fixedGraphModels.FirstOrDefault(model => model.Expression == _expressionModel.ExpressionString);
+
+                /*if (equalModel == default)
+                {*/
+                    _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
+                        _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
+                //}
             }
         }
 

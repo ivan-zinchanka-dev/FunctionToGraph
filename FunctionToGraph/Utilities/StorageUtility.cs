@@ -24,7 +24,6 @@ public static class StorageUtility
     private static void CheckApplicationFolder()
     {
         string path = Path.Combine(AppDataPath, AppFolderName);
-        
         _appDirectoryInfo = new DirectoryInfo(path);
         
         if (!_appDirectoryInfo.Exists)
@@ -33,7 +32,7 @@ public static class StorageUtility
         }
     }
 
-    public static async void SaveGraphModels(IEnumerable<GraphModel> graphModels)
+    public static async void SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
     {
         string jsonNotation = JsonConvert.SerializeObject(graphModels, Formatting.Indented);
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
@@ -41,16 +40,34 @@ public static class StorageUtility
         await File.WriteAllTextAsync(fullFileName, jsonNotation);
     }
     
-    public static async Task<IEnumerable<GraphModel>> ReadGraphModels()
+    public static async Task<IEnumerable<GraphModel>> ReadGraphModelsAsync()
     {
-        // TODO async
-        
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
-        string jsonNotation = await File.ReadAllTextAsync(fullFileName);
 
+        if (!File.Exists(fullFileName))
+        {
+            return new List<GraphModel>();
+        }
+
+        string jsonNotation = await File.ReadAllTextAsync(fullFileName);
         IEnumerable<GraphModel> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModel>>(jsonNotation);
 
         return graphModels ?? new List<GraphModel>();
     }
+    
+    /*public static IEnumerable<GraphModel> ReadGraphModels()
+    {
+        string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
+
+        if (!File.Exists(fullFileName))
+        {
+            return new List<GraphModel>();
+        }
+
+        string jsonNotation = File.ReadAllText(fullFileName);
+        IEnumerable<GraphModel> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModel>>(jsonNotation);
+
+        return graphModels ?? new List<GraphModel>();
+    }*/
     
 }
