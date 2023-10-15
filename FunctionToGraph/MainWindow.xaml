@@ -96,7 +96,17 @@
                 </ListBox>
             </ScrollViewer>
             
-            
+            <Grid Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Grid.Row="0" 
+                        x:FieldModifier="private"
+                        x:Name="_removeFromListButton"
+                        Click="OnRemoveFromListButtonClick"
+                        Content="Remove"  />
+            </Grid>
             
         </StackPanel>
         

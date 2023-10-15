@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using FunctionToGraph.Models;
 using Newtonsoft.Json;
 
@@ -9,13 +10,10 @@ namespace FunctionToGraph.Utilities;
 public static class StorageUtility
 {
     private const string AppFolderName = "FunctionToGraph";
-    
-    private static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
     private const string GraphModelsFileName = "graph_models.json";
     
-    //C:\Users\HP\AppData\Roaming
-
+    private static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    
     private static DirectoryInfo _appDirectoryInfo;
 
     static StorageUtility()
@@ -34,44 +32,25 @@ public static class StorageUtility
             _appDirectoryInfo.Create();
         }
     }
-    
-    
-    public static void SaveGraphModels(IEnumerable<GraphModel> graphModels)
+
+    public static async void SaveGraphModels(IEnumerable<GraphModel> graphModels)
     {
         string jsonNotation = JsonConvert.SerializeObject(graphModels, Formatting.Indented);
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
         
-        File.WriteAllText(fullFileName, jsonNotation);
+        await File.WriteAllTextAsync(fullFileName, jsonNotation);
     }
     
-    public static IEnumerable<GraphModel> ReadGraphModels()
+    public static async Task<IEnumerable<GraphModel>> ReadGraphModels()
     {
+        // TODO async
+        
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
-        string jsonNotation = File.ReadAllText(fullFileName);
+        string jsonNotation = await File.ReadAllTextAsync(fullFileName);
 
         IEnumerable<GraphModel> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModel>>(jsonNotation);
 
         return graphModels ?? new List<GraphModel>();
-    }
-    
-    public static void Test()
-    {
-        string path = Path.Combine(AppDataPath, AppFolderName);
-        
-        DirectoryInfo dirInfo = new DirectoryInfo(path);
-        
-        if (!dirInfo.Exists)
-        {
-            dirInfo.Create();
-        }
-
-        FileInfo fileInfo = new FileInfo(Path.Combine(path, "some_file.txt"));
-
-        if (!fileInfo.Exists)
-        {
-            fileInfo.Create();
-        }
-
     }
     
 }

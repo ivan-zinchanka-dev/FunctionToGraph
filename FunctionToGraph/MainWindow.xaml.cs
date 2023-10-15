@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
@@ -15,61 +19,38 @@ namespace FunctionToGraph
     public partial class MainWindow : Window
     {
         private readonly ExpressionModel _expressionModel;
-        private readonly ObservableCollection<GraphModel> _fixedGraphModels;
+        private ObservableCollection<GraphModel> _fixedGraphModels;
 
         public MainWindow()
         {
             InitializeComponent();
             
-            Closed += OnWindowClosed;
-            Loaded += OnWindowLoaded;
-            
-            _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
-
-            /*_fixedGraphModels.Add(new GraphModel()
-            {
-                ExpressionString = "2*x",
-                Color = System.Drawing.Color.Aqua,
-            });
-            
-            _fixedGraphModels.Add(new GraphModel()
-            {
-                ExpressionString = "Sin(x)",
-                Color = System.Drawing.Color.Chocolate,
-            });*/
-
-            _fixedGraphModels = new ObservableCollection<GraphModel>(StorageUtility.ReadGraphModels());
-            _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
-            _graphsListView.ItemsSource = _fixedGraphModels;
-        }
-
-        private void OnWindowLoaded(object sender, EventArgs args)
-        {
             _plot.Plot.Title("Graph");
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
             
-            _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
-            AppResources.OnGraphColorCahnged += OnGraphColorChanged;
-            
-            RedrawScatterPlot();
-        }
+            _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
-        private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs args)
+            StorageUtility.ReadGraphModels().ContinueWith(task =>
+            {
+                _fixedGraphModels = new ObservableCollection<GraphModel>(task.Result);
+                _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
+                _graphsListView.ItemsSource = _fixedGraphModels;
+                
+                RedrawScatterPlot();
+                
+                _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
+                AppResources.OnGraphColorCahnged += OnGraphColorChanged;
+
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+         
+            Closed += OnWindowClosed;
+        }
+        
+        private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs e)
         {
             StorageUtility.SaveGraphModels(_fixedGraphModels);
         }
-
-        /*private void RedrawScatterPlot()
-        {
-            _plot.Plot.Clear();
-            _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
-                AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
-                LineStyle.Solid, _expressionModel.FullExpressionString);
-            
-            _plot.Plot.Legend();
-            _plot.Refresh();
-        }*/
         
         private void RedrawScatterPlot()
         {
@@ -114,17 +95,25 @@ namespace FunctionToGraph
         
         private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine(_fixedGraphModels.Count);
+            
             if (_expressionModel.IsValidated)
             {
-                _fixedGraphModels.Add(new GraphModel() {
-                    
-                    ExpressionString = _expressionModel.ExpressionString, 
-                    Color = AppResources.GraphColor.ToDotNetColor(),
-                    XValues = _expressionModel.XValues,
-                    YValues = _expressionModel.YValues,
-                    
-                });
+                _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
+                    _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
             }
+        }
+
+        private void OnRemoveFromListButtonClick(object sender, RoutedEventArgs e)
+        {
+            List<GraphModel> selectedItems = new List<GraphModel>(_graphsListView.SelectedItems.Cast<GraphModel>());
+
+            foreach (GraphModel graphModel in selectedItems)
+            {
+                _fixedGraphModels.Remove(graphModel);
+            }
+            
+            RedrawScatterPlot();
         }
         
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
@@ -133,12 +122,11 @@ namespace FunctionToGraph
             graphColorWindow.Show();
         }
         
-        private void OnWindowClosed(object sender, EventArgs args)
+        private void OnWindowClosed(object? sender, EventArgs args)
         {
             _expressionModel.OnValidationCheck -= OnExpressionValidationCheck;
             AppResources.OnGraphColorCahnged -= OnGraphColorChanged;
             
-            Loaded -= OnWindowLoaded;
             Closed -= OnWindowClosed;
         }
 
