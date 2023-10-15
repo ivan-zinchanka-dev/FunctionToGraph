@@ -17,20 +17,18 @@ namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
+        private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
+        
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
-
+        
         public MainWindow()
         {
             InitializeComponent();
-
-            //_plot.Configuration.DpiStretch = false;
             
-            _plot.Plot.Title("Graph");
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
-            //_plot.Plot.SetAxisLimits(-20, 20, -20, 20);
-            
+            _plot.Plot.SetAxisLimits(_defaultPlotViewport);
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
@@ -73,15 +71,10 @@ namespace FunctionToGraph
                     LineStyle.Solid, graphModel.FullExpression);
             }
 
-            _plot.Plot.GetSettings().EqualScaleMode = EqualScaleMode.PreserveSmallest;
-            _plot.Plot.GetSettings().EnforceEqualAxisScales();
-            _plot.Plot.GetSettings().EqualScaleMode = EqualScaleMode.Disabled;
-            
-            /*_plot.Plot.AxisScaleLock(true, EqualScaleMode.PreserveLargest);
-            _plot.Plot.AxisScaleLock(false, EqualScaleMode.PreserveLargest);*/
-            
-            //_plot.Plot.SetOuterViewLimits(-2000, 2000, -2000, 2000);
-            //_plot.Plot.SetInnerViewLimits(-20, 20, -20, 20);
+            Settings settings = _plot.Plot.GetSettings();
+            settings.EqualScaleMode = EqualScaleMode.PreserveSmallest;
+            settings.EnforceEqualAxisScales();
+            settings.EqualScaleMode = EqualScaleMode.Disabled;
             
             _plot.Plot.Legend();
             _plot.Refresh();
@@ -108,16 +101,16 @@ namespace FunctionToGraph
         
         private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
         {
-            if (_expressionModel.IsValidated)
+            if (_expressionModel.IsValidated && !IsAlreadyAddedToList(_expressionModel.ExpressionString))
             {
-                GraphModel equalModel = _fixedGraphModels.FirstOrDefault(model => model.Expression == _expressionModel.ExpressionString);
-
-                if (equalModel == default)
-                {
-                    _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
-                        _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
-                }
+                _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
+                    _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
             }
+        }
+
+        private bool IsAlreadyAddedToList(string expressionString)
+        {
+            return _fixedGraphModels.FirstOrDefault(model => model.Expression == expressionString) != default;
         }
 
         private void OnRemoveFromListButtonClick(object sender, RoutedEventArgs e)

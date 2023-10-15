@@ -11,7 +11,7 @@ public class ExpressionModel : IDataErrorInfo
     private const char XChar = 'x';
     private const string IncorrectExpressionMessage = "Incorrect expression";
     
-    private Range _plotRange = new Range(-10, 10, 160);
+    private Range _plotRange = new Range(-20, 20, 160);
 
     public bool IsValidated { get; private set; }
     public string ExpressionString { get; set; }
@@ -47,6 +47,7 @@ public class ExpressionModel : IDataErrorInfo
                         }
 
                         YValues[i] = result.Value;
+                        //YValues[i] = Math.Clamp(result.Value, _plotRange.Min, _plotRange.Max);
                     }
 
                 }
