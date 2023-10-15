@@ -24,7 +24,7 @@ namespace FunctionToGraph
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
-            _fixedGraphModels.Add(new GraphModel()
+            /*_fixedGraphModels.Add(new GraphModel()
             {
                 ExpressionString = "2*x",
                 Color = System.Drawing.Color.Aqua,
@@ -34,7 +34,7 @@ namespace FunctionToGraph
             {
                 ExpressionString = "Sin(x)",
                 Color = System.Drawing.Color.Chocolate,
-            });
+            });*/
             
             _graphsListView.ItemsSource = _fixedGraphModels;
         }
@@ -81,6 +81,14 @@ namespace FunctionToGraph
             RedrawScatterPlot();
         }
         
+        private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (_expressionModel.IsValidated)
+            {
+                _fixedGraphModels.Add(new GraphModel() { ExpressionString = _expressionModel.ExpressionString, Color = AppResources.GraphColor.ToDotNetColor()});
+            }
+        }
+        
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
         {
             GraphColorWindow graphColorWindow = new GraphColorWindow();
@@ -95,5 +103,7 @@ namespace FunctionToGraph
             Loaded -= OnWindowLoaded;
             Closed -= OnWindowClosed;
         }
+
+        
     }
 }

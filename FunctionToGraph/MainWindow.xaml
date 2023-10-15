@@ -57,7 +57,19 @@
                      UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                     />
             </StackPanel>
-                
+            
+            <Grid Margin="10 0 10 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Grid.Row="0" 
+                        x:FieldModifier="private"
+                        x:Name="_addToListButton"
+                        Click="OnAddToListButtonClick"
+                        Content="Add to list"  />
+            </Grid>
+            
             <TextBlock 
                 Text="{StaticResource Tutorial}"
                 Margin="10"

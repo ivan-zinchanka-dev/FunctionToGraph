@@ -12,7 +12,8 @@ public class ExpressionModel : IDataErrorInfo
     private const string IncorrectExpressionMessage = "Incorrect expression";
     
     private Range _plotRange = new Range(-10, 10, 160);
-    
+
+    public bool IsValidated { get; private set; }
     public string ExpressionString { get; set; }
     public string FullExpressionString => "y=" + ExpressionString;
     
@@ -71,6 +72,12 @@ public class ExpressionModel : IDataErrorInfo
                 ExpressionString = ExpressionString.Insert(i, "*");
             }
             
+            if (ExpressionString[i] == XChar && i < ExpressionString.Length - 1 
+                                             && IsAsciiDigitOrX(ExpressionString[Math.Min(i + 1, ExpressionString.Length - 1)]))
+            {
+                ExpressionString = ExpressionString.Insert(i + 1, "*");
+            }
+            
             if (ExpressionString[i] == XChar && ExpressionString[i - 1] == '-')
             {
                 ExpressionString = ExpressionString.Insert(i, "1*");
@@ -85,6 +92,7 @@ public class ExpressionModel : IDataErrorInfo
 
     private void FireOnValidationCheck(bool validationResult)
     {
+        IsValidated = validationResult;
         OnValidationCheck?.Invoke(this, validationResult);
     }
 
