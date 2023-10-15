@@ -51,13 +51,35 @@ namespace FunctionToGraph
             RedrawScatterPlot();
         }
 
-        private void RedrawScatterPlot()
+        /*private void RedrawScatterPlot()
         {
             _plot.Plot.Clear();
             _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
                 AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
                 LineStyle.Solid, _expressionModel.FullExpressionString);
+            
+            _plot.Plot.Legend();
+            _plot.Refresh();
+        }*/
+        
+        private void RedrawScatterPlot()
+        {
+            _plot.Plot.Clear();
 
+            if (_expressionModel.IsValidated)
+            {
+                _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
+                    AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
+                    LineStyle.Solid, _expressionModel.FullExpressionString);
+            }
+            
+            foreach (GraphModel graphModel in _fixedGraphModels)
+            {
+                _plot.Plot.AddScatter(graphModel.XValues, graphModel.YValues, 
+                    graphModel.Color, 2.0f, 0.0f, MarkerShape.none,
+                    LineStyle.Solid, graphModel.FullExpression);
+            }
+            
             _plot.Plot.Legend();
             _plot.Refresh();
         }
@@ -85,7 +107,14 @@ namespace FunctionToGraph
         {
             if (_expressionModel.IsValidated)
             {
-                _fixedGraphModels.Add(new GraphModel() { ExpressionString = _expressionModel.ExpressionString, Color = AppResources.GraphColor.ToDotNetColor()});
+                _fixedGraphModels.Add(new GraphModel() {
+                    
+                    ExpressionString = _expressionModel.ExpressionString, 
+                    Color = AppResources.GraphColor.ToDotNetColor(),
+                    XValues = _expressionModel.XValues,
+                    YValues = _expressionModel.YValues,
+                    
+                });
             }
         }
         
