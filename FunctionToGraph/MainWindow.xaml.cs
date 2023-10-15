@@ -23,10 +23,14 @@ namespace FunctionToGraph
         public MainWindow()
         {
             InitializeComponent();
+
+            //_plot.Configuration.DpiStretch = false;
             
             _plot.Plot.Title("Graph");
             _plot.Plot.XLabel("x");
             _plot.Plot.YLabel("y");
+            //_plot.Plot.SetAxisLimits(-20, 20, -20, 20);
+            
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
@@ -68,6 +72,16 @@ namespace FunctionToGraph
                     graphModel.Color, 2.0f, 0.0f, MarkerShape.none,
                     LineStyle.Solid, graphModel.FullExpression);
             }
+
+            _plot.Plot.GetSettings().EqualScaleMode = EqualScaleMode.PreserveSmallest;
+            _plot.Plot.GetSettings().EnforceEqualAxisScales();
+            _plot.Plot.GetSettings().EqualScaleMode = EqualScaleMode.Disabled;
+            
+            /*_plot.Plot.AxisScaleLock(true, EqualScaleMode.PreserveLargest);
+            _plot.Plot.AxisScaleLock(false, EqualScaleMode.PreserveLargest);*/
+            
+            //_plot.Plot.SetOuterViewLimits(-2000, 2000, -2000, 2000);
+            //_plot.Plot.SetInnerViewLimits(-20, 20, -20, 20);
             
             _plot.Plot.Legend();
             _plot.Refresh();
