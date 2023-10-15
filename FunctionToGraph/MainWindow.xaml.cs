@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Resources.Logical;
+using FunctionToGraph.Utilities;
 using FunctionToGraph.Views;
 using ScottPlot;
 using Color = System.Windows.Media.Color;
@@ -13,7 +15,7 @@ namespace FunctionToGraph
     public partial class MainWindow : Window
     {
         private readonly ExpressionModel _expressionModel;
-        private readonly ObservableCollection<GraphModel> _fixedGraphModels = new ObservableCollection<GraphModel>();
+        private readonly ObservableCollection<GraphModel> _fixedGraphModels;
 
         public MainWindow()
         {
@@ -35,7 +37,9 @@ namespace FunctionToGraph
                 ExpressionString = "Sin(x)",
                 Color = System.Drawing.Color.Chocolate,
             });*/
-            
+
+            _fixedGraphModels = new ObservableCollection<GraphModel>(StorageUtility.ReadGraphModels());
+            _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
             _graphsListView.ItemsSource = _fixedGraphModels;
         }
 
@@ -49,6 +53,11 @@ namespace FunctionToGraph
             AppResources.OnGraphColorCahnged += OnGraphColorChanged;
             
             RedrawScatterPlot();
+        }
+
+        private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            StorageUtility.SaveGraphModels(_fixedGraphModels);
         }
 
         /*private void RedrawScatterPlot()
