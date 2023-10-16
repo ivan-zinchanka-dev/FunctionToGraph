@@ -11,6 +11,7 @@ using FunctionToGraph.Resources.Logical;
 using FunctionToGraph.Utilities;
 using FunctionToGraph.Views;
 using ScottPlot;
+using ScottPlot.Plottable;
 using Color = System.Windows.Media.Color;
 
 namespace FunctionToGraph
@@ -18,6 +19,7 @@ namespace FunctionToGraph
     public partial class MainWindow : Window
     {
         private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
+        private readonly ScatterPlot.NanBehavior _onNanBehaviour = ScatterPlot.NanBehavior.Ignore;
         
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
@@ -61,14 +63,16 @@ namespace FunctionToGraph
             {
                 _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
                     AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
-                    LineStyle.Solid, _expressionModel.FullExpressionString);
+                    LineStyle.Solid, _expressionModel.FullExpressionString)
+                    .OnNaN = _onNanBehaviour;
             }
             
             foreach (GraphModel graphModel in _fixedGraphModels)
             {
                 _plot.Plot.AddScatter(graphModel.XValues, graphModel.YValues, 
                     graphModel.Color, 2.0f, 0.0f, MarkerShape.none,
-                    LineStyle.Solid, graphModel.FullExpression);
+                    LineStyle.Solid, graphModel.FullExpression)
+                    .OnNaN = _onNanBehaviour;
             }
 
             Settings settings = _plot.Plot.GetSettings();

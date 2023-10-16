@@ -11,7 +11,7 @@ public class ExpressionModel : IDataErrorInfo
     private const char XChar = 'x';
     private const string IncorrectExpressionMessage = "Incorrect expression";
     
-    private Range _plotRange = new Range(-20, 20, 160);
+    private Range _plotRange = new Range(-20, 20, 2000);        // Tan(x)
 
     public bool IsValidated { get; private set; }
     public string ExpressionString { get; set; }

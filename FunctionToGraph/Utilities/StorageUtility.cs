@@ -54,20 +54,5 @@ public static class StorageUtility
 
         return graphModels ?? new List<GraphModel>();
     }
-    
-    /*public static IEnumerable<GraphModel> ReadGraphModels()
-    {
-        string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
 
-        if (!File.Exists(fullFileName))
-        {
-            return new List<GraphModel>();
-        }
-
-        string jsonNotation = File.ReadAllText(fullFileName);
-        IEnumerable<GraphModel> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModel>>(jsonNotation);
-
-        return graphModels ?? new List<GraphModel>();
-    }*/
-    
 }
