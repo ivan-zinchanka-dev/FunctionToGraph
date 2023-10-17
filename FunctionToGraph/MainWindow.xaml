@@ -12,17 +12,18 @@
     <Window.Resources>
         <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
         
-        <ControlTemplate x:Key="GroupBoxTemplate" TargetType="GroupBox">
-            <Border 
-                    BorderBrush="Black"
-                    BorderThickness="1" 
-                    Background="Bisque">
-                <Label Foreground="White">   
-                    <ContentPresenter RecognizesAccessKey="True" />
-                </Label>
-            </Border>
-            
-        </ControlTemplate>
+        <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+            <Style.Setters>
+                <Setter Property="Padding" Value="10 10 10 0"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+            </Style.Setters>
+            <Style.Resources>
+                <Style TargetType="Grid">
+                    <Setter Property="Margin" Value="0,0,0,10"/>
+                </Style>
+            </Style.Resources>
+        </Style>
         
         <ControlTemplate x:Key="ColorPickerTemplate" TargetType="Button" >
             <Border x:Name="Border" 
@@ -57,77 +58,62 @@
             Background="WhiteSmoke"
         >
             
-            <GroupBox Header="Current graph" Padding="0" Margin="2" BorderBrush="Black">
-                
+            <GroupBox Header="Current graph" Style="{StaticResource GroupBoxStyle}">
                 <StackPanel>
-                    <Grid Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="y(x)="/>
-                <TextBox Grid.Column="1"
-                         HorizontalAlignment="Stretch"
-                         MaxLines="1"
-                         MaxLength="30"
-                         DataContext="{StaticResource ExpressionModel}"
-                         Text = "{Binding ExpressionString, Mode=TwoWay,
-                     UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                />
-            </Grid>
-            
-            <Grid Margin="10 0 10 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.6*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" 
-                           x:FieldModifier="private"
-                           x:Name="_messageTextBlock"
-                           Foreground="Red"
-                           TextAlignment="Center"/>
-                <Button Grid.Column="1" Grid.Row="0" 
-                        x:FieldModifier="private"
-                        x:Name="_addToListButton"
-                        Click="OnAddToListButtonClick"
-                        Content="Add to list"  />
-            </Grid>
-            
-            
-            
-            <Grid 
-                Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Graph color:"/>
-                <Button Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    Style="{StaticResource ColorPicker}"
-                    Click="OnGraphColorButtonClick"
-                />
-            </Grid> 
-                
-                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="y(x)="/>
+                        <TextBox Grid.Column="1"
+                                 HorizontalAlignment="Stretch"
+                                 MaxLines="1"
+                                 MaxLength="30"
+                                 DataContext="{StaticResource ExpressionModel}"
+                                 Text = "{Binding ExpressionString, Mode=TwoWay,
+                             UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                        />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" 
+                                   x:FieldModifier="private"
+                                   x:Name="_messageTextBlock"
+                                   Foreground="Red"
+                                   TextAlignment="Center"/>
+                        <Button Grid.Column="1" Grid.Row="0" 
+                                x:FieldModifier="private"
+                                x:Name="_addToListButton"
+                                Click="OnAddToListButtonClick"
+                                Content="Add to list"  />
+                    </Grid>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Graph color:"/>
+                        <Button Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            Style="{StaticResource ColorPicker}"
+                            Click="OnGraphColorButtonClick"
+                        />
+                    </Grid> 
                 </StackPanel>
-                
-               
-                
             </GroupBox>
             
-            
-            
-            <GroupBox Header="Fixed graphs" Padding="0" Margin="2" BorderBrush="Black">
-                
+            <GroupBox Header="Fixed graphs" Style="{StaticResource GroupBoxStyle}">
                 <StackPanel>
-                    
-                    <ScrollViewer Margin="10" Height="100" VerticalScrollBarVisibility="Auto">
-                        <ListBox x:FieldModifier="private" x:Name="_graphsListView">
-                        </ListBox>
-                    </ScrollViewer>
-            
-                    <Grid Margin="10 0 10 0">
+                    <Grid>
+                        <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto">
+                            <ListBox x:FieldModifier="private" x:Name="_graphsListView"/>
+                        </ScrollViewer>
+                    </Grid>
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="0.6*"></ColumnDefinition>
@@ -138,26 +124,17 @@
                                 Click="OnRemoveFromListButtonClick"
                                 Content="Remove"  />
                     </Grid>
-                    
-                    
                 </StackPanel>
-                
-                
-                
-                
             </GroupBox>
             
-            <GroupBox Header="Tutorial" Padding="0" Margin="2" BorderBrush="Black">
-                <TextBlock 
-                Text="{StaticResource Tutorial}"
-                Margin="10"
-                TextWrapping="Wrap"
-                TextAlignment="Justify"
-            />
-                
+            <GroupBox Header="Tutorial" Style="{StaticResource GroupBoxStyle}">
+                <Grid>
+                    <TextBlock 
+                        Text="{StaticResource Tutorial}"
+                        TextWrapping="Wrap"
+                        TextAlignment="Justify"/>
+                </Grid>
             </GroupBox>
-            
-            
         </StackPanel>
         
         <GridSplitter
