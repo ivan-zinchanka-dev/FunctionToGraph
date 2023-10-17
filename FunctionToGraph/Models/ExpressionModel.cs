@@ -9,7 +9,7 @@ namespace FunctionToGraph.Models;
 public class ExpressionModel : IDataErrorInfo
 {
     private const char XChar = 'x';
-    private const string IncorrectExpressionMessage = "Incorrect expression";
+    public const string IncorrectExpressionMessage = "Incorrect expression";
     
     private Range _plotRange = new Range(-20, 20, 2000);        // Tan(x)
 

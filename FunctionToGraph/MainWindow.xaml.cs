@@ -23,6 +23,8 @@ namespace FunctionToGraph
         
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
+
+        private const string AlreadyAddedToListMessage = "Already added to list";
         
         public MainWindow()
         {
@@ -92,6 +94,8 @@ namespace FunctionToGraph
 
         private void OnExpressionValidationCheck(ExpressionModel expressionModel, bool validationResult)
         {
+            _messageTextBlock.Text = string.Empty;
+            
             if (validationResult)
             {
                 RedrawScatterPlot();
@@ -105,7 +109,15 @@ namespace FunctionToGraph
         
         private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
         {
-            if (_expressionModel.IsValidated && !IsAlreadyAddedToList(_expressionModel.ExpressionString))
+            if (!_expressionModel.IsValidated)
+            {
+                _messageTextBlock.Text = ExpressionModel.IncorrectExpressionMessage;
+            }
+            else if (IsAlreadyAddedToList(_expressionModel.ExpressionString))
+            {
+                _messageTextBlock.Text = AlreadyAddedToListMessage;
+            }
+            else
             {
                 _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
                     _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));

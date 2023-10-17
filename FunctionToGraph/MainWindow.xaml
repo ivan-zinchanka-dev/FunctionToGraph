@@ -36,7 +36,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*" MinWidth="100"/>
+            <ColumnDefinition Width="0.25*" MinWidth="200"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" MinWidth="600"/>
         </Grid.ColumnDefinitions>
@@ -44,25 +44,33 @@
             Grid.Column="0" 
             Background="Bisque"
         >
-            <StackPanel 
-                Orientation="Horizontal"
+            <Grid 
                 Margin="10">
-                <TextBlock Text="y(x)="/>
-                <TextBox
-                    Width="150"
-                    MaxLines="1"
-                    MaxLength="30"
-                    DataContext="{StaticResource ExpressionModel}"
-                    Text = "{Binding ExpressionString, Mode=TwoWay,
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="y(x)="/>
+                <TextBox Grid.Column="1"
+                         HorizontalAlignment="Stretch"
+                         MaxLines="1"
+                         MaxLength="30"
+                         DataContext="{StaticResource ExpressionModel}"
+                         Text = "{Binding ExpressionString, Mode=TwoWay,
                      UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                    />
-            </StackPanel>
+                />
+            </Grid>
             
             <Grid Margin="10 0 10 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="0.6*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" 
+                           x:FieldModifier="private"
+                           x:Name="_messageTextBlock"
+                           Foreground="Red"
+                           TextAlignment="Center"/>
                 <Button Grid.Column="1" Grid.Row="0" 
                         x:FieldModifier="private"
                         x:Name="_addToListButton"
@@ -77,22 +85,25 @@
                 TextAlignment="Justify"
             />
             
-            <StackPanel 
-                Orientation="Horizontal"
+            <Grid 
                 Margin="10">
-                <TextBlock Text="Graph color:"/>
-                <Button
-                    Width="100"
-                    Margin="10 0 0 0"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Graph color:"/>
+                <Button Grid.Column="1"
+                    HorizontalAlignment="Stretch"
                     Style="{StaticResource ColorPicker}"
                     Click="OnGraphColorButtonClick"
                 />
-            </StackPanel>
+            </Grid>
             
-            <TextBlock Margin="10" Text="Fixed graphs"/>
+            <TextBlock Margin="10 0 10 0" Text="Fixed graphs"/>
+            <!--<Ellipse Fill="Red" Width="10" Height="10" />-->
+            
             <ScrollViewer Margin="10" Height="100" VerticalScrollBarVisibility="Auto">
                 <ListBox x:FieldModifier="private" x:Name="_graphsListView">
-                    
                 </ListBox>
             </ScrollViewer>
             
