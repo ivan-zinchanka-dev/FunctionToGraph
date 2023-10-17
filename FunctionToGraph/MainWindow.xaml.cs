@@ -18,7 +18,7 @@ namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
-        private const string AlreadyAddedToListMessage = "Already added to list";
+        private const string AlreadyAddedToListMessage = "Already added";
         private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
         private readonly ScatterPlot.NanBehavior _onNanBehaviour = ScatterPlot.NanBehavior.Ignore;
         

@@ -15,7 +15,7 @@
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
             <Style.Setters>
                 <Setter Property="Padding" Value="10 10 10 0"/>
-                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Margin" Value="3 0 3 0"/>
                 <Setter Property="BorderBrush" Value="Black"/>
             </Style.Setters>
             <Style.Resources>
@@ -49,7 +49,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.25*" MinWidth="200"/>
+            <ColumnDefinition Width="0.25*" MinWidth="215"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" MinWidth="600"/>
         </Grid.ColumnDefinitions>
@@ -84,7 +84,7 @@
                                    x:FieldModifier="private"
                                    x:Name="_messageTextBlock"
                                    Foreground="Red"
-                                   TextAlignment="Center"/>
+                                   TextAlignment="Left"/>
                         <Button Grid.Column="1" Grid.Row="0" 
                                 x:FieldModifier="private"
                                 x:Name="_addToListButton"
@@ -142,6 +142,7 @@
             Width="3"
             HorizontalAlignment="Center"
             VerticalAlignment="Stretch"
+            Background="WhiteSmoke"
             />
         
         <scottPlot:WpfPlot
