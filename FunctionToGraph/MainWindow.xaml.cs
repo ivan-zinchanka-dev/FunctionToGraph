@@ -18,13 +18,12 @@ namespace FunctionToGraph
 {
     public partial class MainWindow : Window
     {
+        private const string AlreadyAddedToListMessage = "Already added to list";
         private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
         private readonly ScatterPlot.NanBehavior _onNanBehaviour = ScatterPlot.NanBehavior.Ignore;
         
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
-
-        private const string AlreadyAddedToListMessage = "Already added to list";
         
         public MainWindow()
         {

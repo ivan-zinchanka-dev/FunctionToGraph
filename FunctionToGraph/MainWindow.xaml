@@ -12,7 +12,19 @@
     <Window.Resources>
         <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
         
-        <ControlTemplate TargetType="Button" x:Key="ColorPickerTemplate">
+        <ControlTemplate x:Key="GroupBoxTemplate" TargetType="GroupBox">
+            <Border 
+                    BorderBrush="Black"
+                    BorderThickness="1" 
+                    Background="Bisque">
+                <Label Foreground="White">   
+                    <ContentPresenter RecognizesAccessKey="True" />
+                </Label>
+            </Border>
+            
+        </ControlTemplate>
+        
+        <ControlTemplate x:Key="ColorPickerTemplate" TargetType="Button" >
             <Border x:Name="Border" 
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}" 
@@ -42,10 +54,13 @@
         </Grid.ColumnDefinitions>
         <StackPanel 
             Grid.Column="0" 
-            Background="Bisque"
+            Background="WhiteSmoke"
         >
-            <Grid 
-                Margin="10">
+            
+            <GroupBox Header="Current graph" Padding="0" Margin="2" BorderBrush="Black">
+                
+                <StackPanel>
+                    <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -78,12 +93,7 @@
                         Content="Add to list"  />
             </Grid>
             
-            <TextBlock 
-                Text="{StaticResource Tutorial}"
-                Margin="10"
-                TextWrapping="Wrap"
-                TextAlignment="Justify"
-            />
+            
             
             <Grid 
                 Margin="10">
@@ -97,27 +107,56 @@
                     Style="{StaticResource ColorPicker}"
                     Click="OnGraphColorButtonClick"
                 />
-            </Grid>
+            </Grid> 
+                
+                    
+                </StackPanel>
+                
+               
+                
+            </GroupBox>
             
-            <TextBlock Margin="10 0 10 0" Text="Fixed graphs"/>
-            <!--<Ellipse Fill="Red" Width="10" Height="10" />-->
             
-            <ScrollViewer Margin="10" Height="100" VerticalScrollBarVisibility="Auto">
-                <ListBox x:FieldModifier="private" x:Name="_graphsListView">
-                </ListBox>
-            </ScrollViewer>
             
-            <Grid Margin="10 0 10 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.6*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Grid.Row="0" 
-                        x:FieldModifier="private"
-                        x:Name="_removeFromListButton"
-                        Click="OnRemoveFromListButtonClick"
-                        Content="Remove"  />
-            </Grid>
+            <GroupBox Header="Fixed graphs" Padding="0" Margin="2" BorderBrush="Black">
+                
+                <StackPanel>
+                    
+                    <ScrollViewer Margin="10" Height="100" VerticalScrollBarVisibility="Auto">
+                        <ListBox x:FieldModifier="private" x:Name="_graphsListView">
+                        </ListBox>
+                    </ScrollViewer>
+            
+                    <Grid Margin="10 0 10 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="1" Grid.Row="0" 
+                                x:FieldModifier="private"
+                                x:Name="_removeFromListButton"
+                                Click="OnRemoveFromListButtonClick"
+                                Content="Remove"  />
+                    </Grid>
+                    
+                    
+                </StackPanel>
+                
+                
+                
+                
+            </GroupBox>
+            
+            <GroupBox Header="Tutorial" Padding="0" Margin="2" BorderBrush="Black">
+                <TextBlock 
+                Text="{StaticResource Tutorial}"
+                Margin="10"
+                TextWrapping="Wrap"
+                TextAlignment="Justify"
+            />
+                
+            </GroupBox>
+            
             
         </StackPanel>
         

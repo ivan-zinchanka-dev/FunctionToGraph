@@ -6,6 +6,8 @@
     <system:String x:Key="Tutorial">Enter the function in the field. Use the 'x' to represent an unknown variable. 
         You will see a graph if there are no errors in the notation.</system:String>
     
+    <system:String x:Key="MainTutorial">Hover over an element to display a tooltip</system:String>
+    
     <Color x:Key="GraphColor">Red</Color>
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
     
