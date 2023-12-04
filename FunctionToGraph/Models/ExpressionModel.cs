@@ -47,7 +47,6 @@ public class ExpressionModel : IDataErrorInfo
                         }
 
                         YValues[i] = result.Value;
-                        //YValues[i] = Math.Clamp(result.Value, _plotRange.Min, _plotRange.Max);
                     }
 
                 }

@@ -10,7 +10,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Logical/LogicalResources.xaml" />
-                <!--<ResourceDictionary x:Name="LogicalResources" x:FieldModifier="public" Source="/Resources/Logical/LogicalResources.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

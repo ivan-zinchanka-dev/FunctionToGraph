@@ -10,8 +10,7 @@ namespace FunctionToGraph
     public partial class App : Application
     {
         public ResourceDictionary LogicalResources => Resources.MergedDictionaries[0];
-        
-        
+
         private Mutex _appMutex;
         
         private void OnStartup(object sender, StartupEventArgs e)
