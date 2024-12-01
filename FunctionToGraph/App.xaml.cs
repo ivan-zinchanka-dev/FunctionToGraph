@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
+using FunctionToGraph.Services;
 using FunctionToGraph.Views;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace FunctionToGraph
 {
@@ -14,8 +13,8 @@ namespace FunctionToGraph
         
         public AppResourceModel ResourceModel { get; private set; }
 
-        private readonly IHost _host;
-        
+        private StorageService _storageService;
+        private MainWindow _mainWindow;
         
         public class AppResourceModel
         {
@@ -40,28 +39,16 @@ namespace FunctionToGraph
             public event Action<Color> OnGraphColorChanged; 
         }
         
-        
-        public App()
-        {
-           
-
-            /*_host = Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-
-                })
-                .Build();*/
-        }
-        
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-           
-            ResourceModel = new AppResourceModel(Resources.MergedDictionaries[0]);
-            
             PreventMultipleStartup();
-
-            new MainWindow().Show();
+            
+            ResourceModel = new AppResourceModel(Resources.MergedDictionaries[0]);
+            _storageService = new StorageService();
+            
+            _mainWindow = new MainWindow(_storageService);
+            _mainWindow.Show();
         }
 
         private void PreventMultipleStartup()

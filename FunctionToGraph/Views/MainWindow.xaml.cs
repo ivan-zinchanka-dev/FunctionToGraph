@@ -8,7 +8,6 @@ using System.Windows;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Services;
-using FunctionToGraph.Utilities;
 using ScottPlot;
 using ScottPlot.Plottable;
 using Color = System.Windows.Media.Color;
@@ -23,9 +22,13 @@ namespace FunctionToGraph.Views
         
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
+
+        private readonly StorageService _storageService;
         
-        public MainWindow()
+        public MainWindow(StorageService storageService)
         {
+            _storageService = storageService;
+            
             InitializeComponent();
             
             _plot.Plot.XLabel("x");
@@ -34,7 +37,7 @@ namespace FunctionToGraph.Views
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
 
-            StorageUtility.ReadGraphModelsAsync().ContinueWith(task =>
+            _storageService.ReadGraphModelsAsync().ContinueWith(task =>
             {
                 _fixedGraphModels = new ObservableCollection<GraphModel>(task.Result);
                 _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
@@ -52,7 +55,7 @@ namespace FunctionToGraph.Views
         
         private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            StorageUtility.SaveGraphModelsAsync(_fixedGraphModels);
+            _storageService.SaveGraphModelsAsync(_fixedGraphModels);
         }
         
         private void RedrawScatterPlot()
