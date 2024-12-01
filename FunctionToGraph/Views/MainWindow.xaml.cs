@@ -141,10 +141,16 @@ namespace FunctionToGraph.Views
         
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
         {
-            GraphColorWindow graphColorWindow = new GraphColorWindow();
-            graphColorWindow.Show();
+            ColorPickerWindow colorPickerWindow = new ColorPickerWindow();
+            colorPickerWindow.Show();
+            colorPickerWindow.OnColorPicked += OnGraphColorPicked;
         }
-        
+
+        private void OnGraphColorPicked(Color pickedColor)
+        {
+            App.Instance.ResourceModel.GraphColor = pickedColor;
+        }
+
         private void OnWindowClosed(object? sender, EventArgs args)
         {
             _expressionModel.OnValidationCheck -= OnExpressionValidationCheck;

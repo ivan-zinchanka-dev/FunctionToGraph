@@ -1,4 +1,4 @@
-﻿<Window x:Class="FunctionToGraph.Views.GraphColorWindow"
+﻿<Window x:Class="FunctionToGraph.Views.ColorPickerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,7 +9,7 @@
         Title="GraphColorWindow" Height="410" Width="290"
         WindowStartupLocation="Manual" Top="200" Left="800">
     <StackPanel>
-        <colorpicker:StandardColorPicker x:FieldModifier="private" x:Name="_colorPicker" ColorChanged="OnColorChanged" />
-        <!--<colorpicker:PortableColorPicker ColorState="{Binding ElementName=main, Path=ColorState, Mode=TwoWay}"/>-->
+        <colorpicker:StandardColorPicker x:FieldModifier="private" x:Name="_colorPicker" ColorChanged="OnColorPickedInternal" />
+        <!--TODO Ok button-->
     </StackPanel>
 </Window>
