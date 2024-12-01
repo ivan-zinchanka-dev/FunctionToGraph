@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
-using FunctionToGraph.Resources.Logical;
+using FunctionToGraph.Services;
 using FunctionToGraph.Utilities;
-using FunctionToGraph.Views;
 using ScottPlot;
 using ScottPlot.Plottable;
 using Color = System.Windows.Media.Color;
 
-namespace FunctionToGraph
+namespace FunctionToGraph.Views
 {
     public partial class MainWindow : Window
     {
         private const string AlreadyAddedToListMessage = "Already added";
+        private const ScatterPlot.NanBehavior OnNanBehaviour = ScatterPlot.NanBehavior.Ignore;
         private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
-        private readonly ScatterPlot.NanBehavior _onNanBehaviour = ScatterPlot.NanBehavior.Ignore;
         
         private readonly ExpressionModel _expressionModel;
         private ObservableCollection<GraphModel> _fixedGraphModels;
@@ -44,7 +43,7 @@ namespace FunctionToGraph
                 RedrawScatterPlot();
                 
                 _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
-                AppResources.OnGraphColorCahnged += OnGraphColorChanged;
+                App.Instance.ResourceModel.OnGraphColorChanged += OnGraphColorChanged;
 
             }, TaskScheduler.FromCurrentSynchronizationContext());
          
@@ -63,9 +62,9 @@ namespace FunctionToGraph
             if (_expressionModel.IsValidated)
             {
                 _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
-                    AppResources.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
+                        App.Instance.ResourceModel.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
                     LineStyle.Solid, _expressionModel.FullExpressionString)
-                    .OnNaN = _onNanBehaviour;
+                    .OnNaN = OnNanBehaviour;
             }
             
             foreach (GraphModel graphModel in _fixedGraphModels)
@@ -73,7 +72,7 @@ namespace FunctionToGraph
                 _plot.Plot.AddScatter(graphModel.XValues, graphModel.YValues, 
                     graphModel.Color, 2.0f, 0.0f, MarkerShape.none,
                     LineStyle.Solid, graphModel.FullExpression)
-                    .OnNaN = _onNanBehaviour;
+                    .OnNaN = OnNanBehaviour;
             }
 
             Settings settings = _plot.Plot.GetSettings();
@@ -119,7 +118,7 @@ namespace FunctionToGraph
             else
             {
                 _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
-                    _expressionModel.YValues, AppResources.GraphColor.ToDotNetColor()));
+                    _expressionModel.YValues, App.Instance.ResourceModel.GraphColor.ToDotNetColor()));
             }
         }
 
@@ -149,7 +148,7 @@ namespace FunctionToGraph
         private void OnWindowClosed(object? sender, EventArgs args)
         {
             _expressionModel.OnValidationCheck -= OnExpressionValidationCheck;
-            AppResources.OnGraphColorCahnged -= OnGraphColorChanged;
+            App.Instance.ResourceModel.OnGraphColorChanged -= OnGraphColorChanged;
             
             Closed -= OnWindowClosed;
         }

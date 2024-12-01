@@ -10,10 +10,21 @@
 
     <ItemGroup>
       <PackageReference Include="CoreCLR-NCalc" Version="2.2.113" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.1" />
       <PackageReference Include="ScottPlot.WPF" Version="4.1.67" />
       <PackageReference Include="System.Reactive" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
 </Project>
