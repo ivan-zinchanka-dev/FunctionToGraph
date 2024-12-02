@@ -23,9 +23,8 @@ namespace FunctionToGraph.Views
         private Color _graphColor;
         private readonly string _alreadyPinnedMessage;
         
-        private ObservableCollection<GraphModel> _fixedGraphModels;
-        
         private readonly StorageService _storageService;
+        private ObservableCollection<GraphModel> _pinnedGraphModels;
         
         private static class ResourceKeys
         {
@@ -50,9 +49,9 @@ namespace FunctionToGraph.Views
             
             _storageService.ReadGraphModelsAsync().ContinueWith(task =>
             {
-                _fixedGraphModels = new ObservableCollection<GraphModel>(task.Result);
-                _fixedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
-                _graphsListView.ItemsSource = _fixedGraphModels;
+                _pinnedGraphModels = new ObservableCollection<GraphModel>(task.Result);
+                _pinnedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
+                _graphsListView.ItemsSource = _pinnedGraphModels;
                 
                 RedrawScatterPlot();
                 
@@ -65,7 +64,7 @@ namespace FunctionToGraph.Views
         
         private void UpdateGraphModelsStorage(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            _storageService.SaveGraphModelsAsync(_fixedGraphModels);
+            _storageService.SaveGraphModelsAsync(_pinnedGraphModels);
         }
         
         private void RedrawScatterPlot()
@@ -86,7 +85,7 @@ namespace FunctionToGraph.Views
                     .OnNaN = OnNanBehaviour;
             }
             
-            foreach (GraphModel graphModel in _fixedGraphModels)
+            foreach (GraphModel graphModel in _pinnedGraphModels)
             {
                 _plot.Plot.AddScatter(
                         graphModel.XValues, 
@@ -119,7 +118,7 @@ namespace FunctionToGraph.Views
             }
         }
         
-        private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
+        private void OnPinButtonClick(object sender, RoutedEventArgs e)
         {
             if (!_expressionModel.IsValidated)
             {
@@ -131,7 +130,7 @@ namespace FunctionToGraph.Views
             }
             else
             {
-                _fixedGraphModels.Add(new GraphModel(
+                _pinnedGraphModels.Add(new GraphModel(
                     _expressionModel.ExpressionString, 
                     _expressionModel.XValues, 
                     _expressionModel.YValues, 
@@ -141,22 +140,22 @@ namespace FunctionToGraph.Views
 
         private bool IsAlreadyAddedToList(string expressionString)
         {
-            return _fixedGraphModels.FirstOrDefault(model => model.Expression == expressionString) != default;
+            return _pinnedGraphModels.FirstOrDefault(model => model.Expression == expressionString) != default;
         }
 
-        private void OnRemoveFromListButtonClick(object sender, RoutedEventArgs e)
+        private void OnUnpinButtonClick(object sender, RoutedEventArgs e)
         {
             List<GraphModel> selectedItems = new List<GraphModel>(_graphsListView.SelectedItems.Cast<GraphModel>());
 
             foreach (GraphModel graphModel in selectedItems)
             {
-                _fixedGraphModels.Remove(graphModel);
+                _pinnedGraphModels.Remove(graphModel);
             }
             
             RedrawScatterPlot();
         }
         
-        private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
+        private void OnPickColorButtonClick(object sender, RoutedEventArgs e)
         {
             ColorPickerWindow colorPickerWindow = new ColorPickerWindow(_graphColor);
             colorPickerWindow.Show();

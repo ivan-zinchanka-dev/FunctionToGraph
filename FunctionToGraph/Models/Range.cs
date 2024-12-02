@@ -18,7 +18,7 @@ public struct Range
         
         if (count < 2)
         {
-            throw new ArgumentOutOfRangeException(nameof(count), count, "Should greater than 2");
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Should be greater than 2");
         }
         
         Min = min;

@@ -58,7 +58,7 @@
                         <Button Grid.Column="1" Grid.Row="0" 
                                 x:FieldModifier="private"
                                 x:Name="_addToListButton"
-                                Click="OnAddToListButtonClick"
+                                Click="OnPinButtonClick"
                                 Content="Pin"  />
                     </Grid>
                     <Grid >
@@ -70,7 +70,7 @@
                         <Button Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             Style="{StaticResource ColorPicker}"
-                            Click="OnGraphColorButtonClick"
+                            Click="OnPickColorButtonClick"
                         />
                     </Grid> 
                 </StackPanel>
@@ -91,7 +91,7 @@
                         <Button Grid.Column="1" Grid.Row="0" 
                                 x:FieldModifier="private"
                                 x:Name="_removeFromListButton"
-                                Click="OnRemoveFromListButtonClick"
+                                Click="OnUnpinButtonClick"
                                 Content="Unpin"  />
                     </Grid>
                 </StackPanel>
