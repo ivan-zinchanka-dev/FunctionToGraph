@@ -10,6 +10,7 @@
     
     <Window.Resources>
         <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
+        <Color x:Key="GraphColor">Blue</Color>
         
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
             <Style.Setters>

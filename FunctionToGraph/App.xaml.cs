@@ -11,7 +11,7 @@ namespace FunctionToGraph
     {
         public static App Instance => Current as App;
         
-        public AppResourceModel ResourceModel { get; private set; }
+        //public AppResourceModel ResourceModel { get; private set; }
 
         private StorageService _storageService;
         private MainWindow _mainWindow;
@@ -44,7 +44,7 @@ namespace FunctionToGraph
             base.OnStartup(e);
             PreventMultipleStartup();
             
-            ResourceModel = new AppResourceModel(Resources.MergedDictionaries[0]);
+            //ResourceModel = new AppResourceModel(Resources.MergedDictionaries[0]);
             _storageService = new StorageService();
             
             _mainWindow = new MainWindow(_storageService);

@@ -21,13 +21,44 @@ namespace FunctionToGraph.Views
         private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
         
         private readonly ExpressionModel _expressionModel;
-        private ObservableCollection<GraphModel> _fixedGraphModels;
-
-        private readonly StorageService _storageService;
+        private Color _graphColor;
         
+        private ObservableCollection<GraphModel> _fixedGraphModels;
+        
+        private readonly StorageService _storageService;
+        private readonly ResourceModel _resourceModel;
+        
+        public class ResourceModel
+        {
+            private const string ExpressionModelKey = "ExpressionModel";
+            private const string GraphColorKey = "GraphColor";
+            private readonly ResourceDictionary _resourceDictionary;
+            
+            public ExpressionModel GraphExpressionModel => (ExpressionModel)_resourceDictionary[ExpressionModelKey];
+            
+            public Color GraphColor
+            {
+                get => (Color)_resourceDictionary[GraphColorKey];
+                set
+                {
+                    _resourceDictionary[GraphColorKey] = value; 
+                    OnGraphColorChanged?.Invoke(value);
+                }
+            }
+            
+            public event Action<Color> OnGraphColorChanged; 
+            
+            public ResourceModel(ResourceDictionary resourceDictionary)
+            {
+                _resourceDictionary = resourceDictionary;
+            }
+        }
+
+
         public MainWindow(StorageService storageService)
         {
             _storageService = storageService;
+            _resourceModel = new ResourceModel(Resources);
             
             InitializeComponent();
             
@@ -36,7 +67,8 @@ namespace FunctionToGraph.Views
             _plot.Plot.SetAxisLimits(_defaultPlotViewport);
             
             _expressionModel = (ExpressionModel)Resources["ExpressionModel"];
-
+            _graphColor = (Color)Resources["GraphColor"];
+            
             _storageService.ReadGraphModelsAsync().ContinueWith(task =>
             {
                 _fixedGraphModels = new ObservableCollection<GraphModel>(task.Result);
@@ -46,7 +78,6 @@ namespace FunctionToGraph.Views
                 RedrawScatterPlot();
                 
                 _expressionModel.OnValidationCheck += OnExpressionValidationCheck;
-                App.Instance.ResourceModel.OnGraphColorChanged += OnGraphColorChanged;
 
             }, TaskScheduler.FromCurrentSynchronizationContext());
          
@@ -64,17 +95,29 @@ namespace FunctionToGraph.Views
 
             if (_expressionModel.IsValidated)
             {
-                _plot.Plot.AddScatter(_expressionModel.XValues, _expressionModel.YValues, 
-                        App.Instance.ResourceModel.GraphColor.ToDotNetColor(), 2.0f, 0.0f, MarkerShape.none,
-                    LineStyle.Solid, _expressionModel.FullExpressionString)
+                _plot.Plot.AddScatter(
+                        _expressionModel.XValues, 
+                        _expressionModel.YValues, 
+                        _graphColor.ToDotNetColor(), 
+                        2.0f, 
+                        0.0f, 
+                        MarkerShape.none, 
+                        LineStyle.Solid, 
+                        _expressionModel.FullExpressionString)
                     .OnNaN = OnNanBehaviour;
             }
             
             foreach (GraphModel graphModel in _fixedGraphModels)
             {
-                _plot.Plot.AddScatter(graphModel.XValues, graphModel.YValues, 
-                    graphModel.Color, 2.0f, 0.0f, MarkerShape.none,
-                    LineStyle.Solid, graphModel.FullExpression)
+                _plot.Plot.AddScatter(
+                        graphModel.XValues, 
+                        graphModel.YValues, 
+                        graphModel.Color, 
+                        2.0f, 
+                        0.0f, 
+                        MarkerShape.none, 
+                        LineStyle.Solid, 
+                        graphModel.FullExpression)
                     .OnNaN = OnNanBehaviour;
             }
 
@@ -102,11 +145,6 @@ namespace FunctionToGraph.Views
                 RedrawScatterPlot();
             }
         }
-
-        private void OnGraphColorChanged(Color color)
-        {
-            RedrawScatterPlot();
-        }
         
         private void OnAddToListButtonClick(object sender, RoutedEventArgs e)
         {
@@ -120,8 +158,11 @@ namespace FunctionToGraph.Views
             }
             else
             {
-                _fixedGraphModels.Add(new GraphModel(_expressionModel.ExpressionString, _expressionModel.XValues, 
-                    _expressionModel.YValues, App.Instance.ResourceModel.GraphColor.ToDotNetColor()));
+                _fixedGraphModels.Add(new GraphModel(
+                    _expressionModel.ExpressionString, 
+                    _expressionModel.XValues, 
+                    _expressionModel.YValues, 
+                    _graphColor.ToDotNetColor()));
             }
         }
 
@@ -151,14 +192,14 @@ namespace FunctionToGraph.Views
 
         private void OnGraphColorPicked(Color pickedColor)
         {
-            App.Instance.ResourceModel.GraphColor = pickedColor;
+            _graphColor = pickedColor;
+            Resources["GraphColor"] = _graphColor; 
+            RedrawScatterPlot();
         }
 
-        private void OnWindowClosed(object? sender, EventArgs args)
+        private void OnWindowClosed(object sender, EventArgs args)
         {
             _expressionModel.OnValidationCheck -= OnExpressionValidationCheck;
-            App.Instance.ResourceModel.OnGraphColorChanged -= OnGraphColorChanged;
-            
             Closed -= OnWindowClosed;
         }
 
