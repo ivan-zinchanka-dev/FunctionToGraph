@@ -6,7 +6,40 @@
     <system:String x:Key="Tutorial">Enter the function in the field. Use the 'x' to represent an unknown variable. 
         You will see a graph if there are no errors in the notation.</system:String>
     
-    
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+    
+    <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+        <Style.Setters>
+            <Setter Property="Padding" Value="10 10 10 0"/>
+            <Setter Property="Margin" Value="3 0 3 0"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style.Setters>
+        <Style.Resources>
+            <Style TargetType="Grid">
+                <Setter Property="Margin" Value="0,0,0,10"/>
+            </Style>
+        </Style.Resources>
+    </Style>
+    
+    <ControlTemplate x:Key="ColorPickerTemplate" TargetType="Button" >
+        <Border x:Name="Border" 
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}" 
+                Background="{TemplateBinding Background}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <Style x:Key="ColorPicker" TargetType="Button">
+        <Style.Setters>
+            <Setter Property="DataContext" Value="{DynamicResource GraphColor}"/>
+            <Setter Property="Background" Value="{Binding Converter={StaticResource ColorToBrushConverter}}"/>
+            <Setter Property="Template" Value="{StaticResource ColorPickerTemplate}"/>
+        </Style.Setters>
+    </Style>
     
 </ResourceDictionary>

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
         xmlns:models="clr-namespace:FunctionToGraph.Models"
         mc:Ignorable="d"
@@ -11,40 +12,7 @@
     <Window.Resources>
         <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
         <Color x:Key="GraphColor">Red</Color>
-        
-        <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
-            <Style.Setters>
-                <Setter Property="Padding" Value="10 10 10 0"/>
-                <Setter Property="Margin" Value="3 0 3 0"/>
-                <Setter Property="BorderBrush" Value="Black"/>
-            </Style.Setters>
-            <Style.Resources>
-                <Style TargetType="Grid">
-                    <Setter Property="Margin" Value="0,0,0,10"/>
-                </Style>
-            </Style.Resources>
-        </Style>
-        
-        <ControlTemplate x:Key="ColorPickerTemplate" TargetType="Button" >
-            <Border x:Name="Border" 
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}" 
-                    Background="{TemplateBinding Background}">
-                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        
-        <Style x:Key="ColorPicker" TargetType="Button">
-            <Style.Setters>
-                <Setter Property="DataContext" Value="{DynamicResource GraphColor}"/>
-                <Setter Property="Background" Value="{Binding Converter={StaticResource ColorToBrushConverter}}"/>
-                <Setter Property="Template" Value="{StaticResource ColorPickerTemplate}"/>
-            </Style.Setters>
-        </Style>
+        <system:String x:Key="AlreadyPinnedMessage">Already pinned.</system:String>
     </Window.Resources>
     
     <Grid>
@@ -91,7 +59,7 @@
                                 x:FieldModifier="private"
                                 x:Name="_addToListButton"
                                 Click="OnAddToListButtonClick"
-                                Content="Add to list"  />
+                                Content="Pin"  />
                     </Grid>
                     <Grid >
                         <Grid.ColumnDefinitions>
@@ -108,7 +76,7 @@
                 </StackPanel>
             </GroupBox>
             
-            <GroupBox Header="Fixed graphs" Style="{StaticResource GroupBoxStyle}">
+            <GroupBox Header="Pinned graphs" Style="{StaticResource GroupBoxStyle}">
                 <StackPanel>
                     <Grid>
                         <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto">
@@ -124,7 +92,7 @@
                                 x:FieldModifier="private"
                                 x:Name="_removeFromListButton"
                                 Click="OnRemoveFromListButtonClick"
-                                Content="Remove"  />
+                                Content="Unpin"  />
                     </Grid>
                 </StackPanel>
             </GroupBox>

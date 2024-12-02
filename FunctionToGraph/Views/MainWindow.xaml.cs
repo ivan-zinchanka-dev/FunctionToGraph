@@ -16,12 +16,12 @@ namespace FunctionToGraph.Views
 {
     public partial class MainWindow : Window
     {
-        private const string AlreadyAddedToListMessage = "Already added";
         private const ScatterPlot.NanBehavior OnNanBehaviour = ScatterPlot.NanBehavior.Ignore;
-        private readonly AxisLimits _defaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
+        private static readonly AxisLimits DefaultPlotViewport = new AxisLimits(-10.0, 10.0, -10.0, 10.0);
         
         private readonly ExpressionModel _expressionModel;
         private Color _graphColor;
+        private readonly string _alreadyPinnedMessage;
         
         private ObservableCollection<GraphModel> _fixedGraphModels;
         
@@ -31,6 +31,7 @@ namespace FunctionToGraph.Views
         {
             public const string ExpressionModel = "ExpressionModel";
             public const string GraphColor = "GraphColor";
+            public const string AlreadyPinnedMessageKey = "AlreadyPinnedMessage";
         }
         
         public MainWindow(StorageService storageService)
@@ -39,12 +40,13 @@ namespace FunctionToGraph.Views
             
             InitializeComponent();
             
-            _plot.Plot.XLabel("x");
-            _plot.Plot.YLabel("y");
-            _plot.Plot.SetAxisLimits(_defaultPlotViewport);
-            
             _expressionModel = (ExpressionModel)Resources[ResourceKeys.ExpressionModel];
             _graphColor = (Color)Resources[ResourceKeys.GraphColor];
+            _alreadyPinnedMessage = (string)Resources[ResourceKeys.AlreadyPinnedMessageKey];
+            
+            _plot.Plot.XLabel("x");
+            _plot.Plot.YLabel("y");
+            _plot.Plot.SetAxisLimits(DefaultPlotViewport);
             
             _storageService.ReadGraphModelsAsync().ContinueWith(task =>
             {
@@ -125,7 +127,7 @@ namespace FunctionToGraph.Views
             }
             else if (IsAlreadyAddedToList(_expressionModel.ExpressionString))
             {
-                _messageTextBlock.Text = AlreadyAddedToListMessage;
+                _messageTextBlock.Text = _alreadyPinnedMessage;
             }
             else
             {
