@@ -10,7 +10,7 @@
     
     <Window.Resources>
         <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
-        <Color x:Key="GraphColor">Blue</Color>
+        <Color x:Key="GraphColor">Red</Color>
         
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
             <Style.Setters>
@@ -71,8 +71,10 @@
                                  MaxLines="1"
                                  MaxLength="30"
                                  DataContext="{StaticResource ExpressionModel}"
-                                 Text = "{Binding ExpressionString, Mode=TwoWay,
-                             UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                 Text = "{Binding ExpressionString, 
+                                    Mode=TwoWay, 
+                                    UpdateSourceTrigger=PropertyChanged, 
+                                    ValidatesOnDataErrors=True}"
                         />
                     </Grid>
                     <Grid>
