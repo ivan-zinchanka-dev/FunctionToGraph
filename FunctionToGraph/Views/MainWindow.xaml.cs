@@ -158,7 +158,7 @@ namespace FunctionToGraph.Views
         
         private void OnGraphColorButtonClick(object sender, RoutedEventArgs e)
         {
-            ColorPickerWindow colorPickerWindow = new ColorPickerWindow();
+            ColorPickerWindow colorPickerWindow = new ColorPickerWindow(_graphColor);
             colorPickerWindow.Show();
             colorPickerWindow.OnColorPicked += OnGraphColorPicked;
         }
