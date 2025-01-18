@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionToGraph", "FunctionToGraph\FunctionToGraph.csproj", "{173FF6F6-4804-43B3-8105-4CB1E4553A61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionCalculator", "FunctionCalculator\FunctionCalculator.csproj", "{95A2DA5D-891B-405D-80CF-E3F11DB11C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{47CFCBBC-755B-4339-90C3-F260E4F04C27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{173FF6F6-4804-43B3-8105-4CB1E4553A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{173FF6F6-4804-43B3-8105-4CB1E4553A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{173FF6F6-4804-43B3-8105-4CB1E4553A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A2DA5D-891B-405D-80CF-E3F11DB11C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A2DA5D-891B-405D-80CF-E3F11DB11C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A2DA5D-891B-405D-80CF-E3F11DB11C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A2DA5D-891B-405D-80CF-E3F11DB11C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47CFCBBC-755B-4339-90C3-F260E4F04C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47CFCBBC-755B-4339-90C3-F260E4F04C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47CFCBBC-755B-4339-90C3-F260E4F04C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47CFCBBC-755B-4339-90C3-F260E4F04C27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
