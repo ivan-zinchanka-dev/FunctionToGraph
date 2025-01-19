@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
-        xmlns:models="clr-namespace:FunctionToGraph.Models"
+        xmlns:commonModels="clr-namespace:Common.Models;assembly=Common"
         mc:Ignorable="d"
         Title="Function to graph" Height="550" Width="1000">
     
     <Window.Resources>
-        <models:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
+        <commonModels:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
         <Color x:Key="GraphColor">Red</Color>
         <system:String x:Key="AlreadyPinnedMessage">Already pinned.</system:String>
     </Window.Resources>

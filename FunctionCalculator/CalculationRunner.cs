@@ -8,7 +8,7 @@ public class CalculationRunner
     {
         ExpressionModel expressionModel = new ExpressionModel("x*(x-2)");
         
-        bool result = expressionModel.Validate(out string errorMessage);
+        bool result = expressionModel.TryValidate(out string errorMessage);
 
         Console.WriteLine("Result: " + result);
         

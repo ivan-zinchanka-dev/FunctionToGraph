@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Common.Models;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Services;

@@ -6,14 +6,14 @@ namespace Common.Models
 {
     public class ExpressionModel : IDataErrorInfo
     {
+        private static readonly Range DefaultPlotRange = new Range(-20, 20, 2000);
         private const char XChar = 'x';
         public const string IncorrectExpressionMessage = "Incorrect expression";
-        
-        private Range _plotRange = new Range(-20, 20, 2000);
 
-        public bool IsValidated { get; private set; }
-        public string ExpressionString { get; set; }
+        public string ExpressionString { get; set; } = string.Empty;
+        public Range PlotRange { get; set; } = DefaultPlotRange;
         public string FullExpressionString => "y=" + ExpressionString;
+        public bool IsValidated { get; private set; }
         
         public double[] XValues { get; private set; }
         public double[] YValues { get; private set; }
@@ -21,18 +21,25 @@ namespace Common.Models
         public event Action<ExpressionModel, bool> OnValidationCheck;
         public string Error => string.Empty;
 
+        public ExpressionModel() { }
+        
         public ExpressionModel(string expressionString)
         {
             ExpressionString = expressionString;
         }
+        
+        public ExpressionModel(string expressionString, Range plotRange) : this(expressionString)
+        {
+            PlotRange = plotRange;
+        }
 
-        public bool Validate(out string errorMessage)
+        public bool TryValidate(out string errorMessage)
         {
             try
             {
                 CorrectExpressionIfNeed();
                         
-                XValues = _plotRange.Generate().ToArray();
+                XValues = PlotRange.Generate().ToArray();
                 YValues = new double[XValues.Length];
 
                 for (int i = 0; i < YValues.Length; i++)
@@ -49,6 +56,7 @@ namespace Common.Models
                     YValues[i] = result.Value;
                 }
 
+                FireOnValidationCheck(true);
                 errorMessage = string.Empty;
                 return true;
             }
@@ -66,11 +74,10 @@ namespace Common.Models
             {
                 if (columnName == nameof(ExpressionString))
                 {
-                    Validate(out string errorMessage);
+                    TryValidate(out string errorMessage);
                     return errorMessage;
                 }
                 
-                FireOnValidationCheck(true);
                 return string.Empty;
             }
         }
