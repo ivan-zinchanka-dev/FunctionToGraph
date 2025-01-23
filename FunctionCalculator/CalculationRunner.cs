@@ -11,6 +11,7 @@ public class CalculationRunner
     // TODO use params
     // TODO use async
     // TODO add report.metadata.json (or xaml) to report.csv 
+    // TypeConverter(typeof(ColorConverter))
     
     public void Run(string expression, string outputDirectory)
     {
