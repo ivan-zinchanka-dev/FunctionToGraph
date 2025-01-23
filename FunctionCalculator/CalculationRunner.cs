@@ -10,6 +10,7 @@ public class CalculationRunner
 {
     // TODO use params
     // TODO use async
+    // TODO add report.metadata.json (or xaml) to report.csv 
     
     public void Run(string expression, string outputDirectory)
     {
@@ -25,7 +26,7 @@ public class CalculationRunner
             expressionModel.YValues,
             Color.Red);
 
-        using (StreamWriter streamWriter = new StreamWriter("table.csv", false))
+        /*using (StreamWriter streamWriter = new StreamWriter("table.csv", false))
         {
             using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
             {
@@ -33,12 +34,12 @@ public class CalculationRunner
                 csvWriter.WriteRecords(ToCalculationRecords(graphModel));
                 csvWriter.Flush();
             }
-        }
+        }*/
 
 
-        /*CsvConfiguration config = CsvConfiguration.FromAttributes<CalculationRecord>();
+        CsvConfiguration config = CsvConfiguration.FromAttributes<CalculationRecord>();
         
-        using (StreamReader streamReader = new StreamReader("in.csv"))
+        using (StreamReader streamReader = new StreamReader("table.csv"))
         {
             using (CsvReader csvReader = new CsvReader(streamReader, config))
             {
@@ -49,7 +50,7 @@ public class CalculationRunner
                     Console.WriteLine(record);
                 }
             }
-        }*/
+        }
 
         Console.WriteLine("CSV ready");
     }
@@ -59,18 +60,9 @@ public class CalculationRunner
         CalculationRecord[] records = new CalculationRecord[
             Math.Min(graphModel.XValues.Length, graphModel.YValues.Length)];
         
-        if (records.Length > 0)
+        for (int i = 0; i < records.Length; i++)
         {
-            records[0] = new CalculationRecord(
-                graphModel.Expression, 
-                graphModel.XValues[0], 
-                graphModel.YValues[0],
-                graphModel.Color);
-        }
-        
-        for (int i = 1; i < records.Length; i++)
-        {
-            records[i] = new CalculationRecord(graphModel.XValues[i],  graphModel.YValues[i]);
+            records[i] = new CalculationRecord(graphModel.Expression, graphModel.XValues[i], graphModel.YValues[i]);
         }
 
         return records;
