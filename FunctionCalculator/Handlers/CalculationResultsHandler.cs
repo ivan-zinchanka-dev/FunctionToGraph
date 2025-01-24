@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace FunctionCalculator.Handlers;
 
@@ -8,7 +9,7 @@ public class CalculationResultsHandler
     private const string DefaultFolderName = "Results";
     private const string ResultsFileName = "results.csv";
 
-    public async Task HandleAsync(GraphModel graphModel, string outputDirectoryPath)
+    public void HandleAsync(GraphModel graphModel, string outputDirectoryPath)
     {
         if (graphModel == null)
         {
@@ -23,14 +24,24 @@ public class CalculationResultsHandler
         }
 
         string resultsFilePath = Path.Combine(outputDirectory.FullName, ResultsFileName);
+
+        FileInfo resultsFile = new FileInfo(resultsFilePath);
+        bool appendMode = resultsFile.Exists && resultsFile.Length > 0;
         
-        using (StreamWriter streamWriter = new StreamWriter(resultsFilePath, true))
+        using (StreamWriter streamWriter = new StreamWriter(resultsFilePath, appendMode))
         {
-            using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
+            CsvConfiguration csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                await csvWriter.WriteRecordsAsync(ToCalculationRecords(graphModel));
-                await csvWriter.FlushAsync();
+                HasHeaderRecord = !appendMode,
+            };
+            
+            using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfig, leaveOpen: true))
+            {
+                csvWriter.WriteRecords(ToCalculationRecords(graphModel));
+                csvWriter.Flush();
             }
+            
+            streamWriter.Flush();
         }
     }
 

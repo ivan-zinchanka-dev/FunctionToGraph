@@ -17,7 +17,7 @@ public class CalculationRunner
         {
             GraphModel graphModel = new ExpressionHandler().Handle(expression);
             
-            await new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
+            new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
         }
         catch (Exception ex)
         {
