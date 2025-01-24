@@ -11,6 +11,13 @@ public class GraphModel
 
     public string FullExpression => "y=" + Expression;
     
+    public GraphModel(string expression, double[] xValues, double[] yValues)
+    {
+        Expression = expression;
+        XValues = xValues;
+        YValues = yValues;
+    }
+    
     public GraphModel(string expression, double[] xValues, double[] yValues, Color color)
     {
         Expression = expression;

@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.ComponentModel.DataAnnotations;
 
 namespace FunctionCalculator;
 
@@ -10,6 +11,8 @@ public static class Program
 
         Option<string> expressionOption =
             new Option<string>("--exp", "Specifies the expression, that represents function");
+        expressionOption.IsRequired = true;
+        
         rootCommand.AddOption(expressionOption);
         
         Option<string> outputDirectoryOption =

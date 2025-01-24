@@ -1,8 +1,4 @@
-﻿using System.Drawing;
-using System.Globalization;
-using Common.Models;
-using CsvHelper;
-using CsvHelper.Configuration;
+﻿using FunctionCalculator.Handlers;
 
 namespace FunctionCalculator;
 
@@ -12,33 +8,24 @@ public class CalculationRunner
     // TODO use async
     // TODO add report.metadata.json (or xaml) to report.csv 
     // TypeConverter(typeof(ColorConverter))
+
     
-    public void Run(string expression, string outputDirectory)
+    
+    public async void Run(string expression, string outputDirectoryPath)
     {
-        ExpressionModel expressionModel = new ExpressionModel("x*(x-2)");
-        
-        bool result = expressionModel.TryValidate(out string errorMessage);
-
-        Console.WriteLine("Result: " + result);
-
-        GraphModel graphModel = new GraphModel(
-            expressionModel.FullExpressionString,
-            expressionModel.XValues,
-            expressionModel.YValues,
-            Color.Red);
-
-        /*using (StreamWriter streamWriter = new StreamWriter("table.csv", false))
+        try
         {
-            using (CsvWriter csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
-            {
-                //csvWriter.WriteComment("This is a metadata ta ta dada tata\n");
-                csvWriter.WriteRecords(ToCalculationRecords(graphModel));
-                csvWriter.Flush();
-            }
-        }*/
+            GraphModel graphModel = new ExpressionHandler().Handle(expression);
+            
+            await new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
+        }
+        catch (Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+        
 
-
-        CsvConfiguration config = CsvConfiguration.FromAttributes<CalculationRecord>();
+        /*CsvConfiguration config = CsvConfiguration.FromAttributes<CalculationRecord>();
         
         using (StreamReader streamReader = new StreamReader("table.csv"))
         {
@@ -51,21 +38,18 @@ public class CalculationRunner
                     Console.WriteLine(record);
                 }
             }
-        }
+        }*/
 
-        Console.WriteLine("CSV ready");
+        //Console.WriteLine("CSV ready");
     }
 
-    private IEnumerable<CalculationRecord> ToCalculationRecords(GraphModel graphModel)
-    {
-        CalculationRecord[] records = new CalculationRecord[
-            Math.Min(graphModel.XValues.Length, graphModel.YValues.Length)];
-        
-        for (int i = 0; i < records.Length; i++)
-        {
-            records[i] = new CalculationRecord(graphModel.Expression, graphModel.XValues[i], graphModel.YValues[i]);
-        }
 
-        return records;
+    private async Task HandleErrorAsync(Exception ex)
+    {
+        ConsoleColor defaultColor = Console.ForegroundColor;
+        
+        Console.ForegroundColor = ConsoleColor.Red;
+        await Console.Error.WriteLineAsync(ex.Message);
+        Console.ForegroundColor = defaultColor;
     }
 }
