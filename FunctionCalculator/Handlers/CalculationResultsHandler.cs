@@ -14,7 +14,7 @@ public class CalculationResultsHandler
         }
         
         StorageService storageService = new StorageService(outputDirectoryPath ?? GetDefaultDirectoryPath());
-        storageService.SaveGraphModelsAsync(graphModel);
+        storageService.SaveGraphModels(graphModel);
     }
     
     private static string GetDefaultDirectoryPath()

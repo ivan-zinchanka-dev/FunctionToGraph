@@ -26,13 +26,12 @@ public class StorageService
         CheckStorageDirectory();
     }
 
-    public void SaveGraphModelsAsync(GraphModel graphModel)
+    public void SaveGraphModels(GraphModel graphModel)
     {
-        SaveGraphModelsAsync(new []{ graphModel });
+        SaveGraphModels(new []{ graphModel });
     }
-
-    // TODO Async
-    public void SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
+    
+    public void SaveGraphModels(IEnumerable<GraphModel> graphModels)
     {
         CheckStorageDirectory();
         
@@ -113,9 +112,8 @@ public class StorageService
 
         return new GraphModel(recordsKey, xValues, yValues);
     }
-
-    //TODO Async
-    public IEnumerable<GraphModel> GetGraphModelsAsync()
+    
+    public IEnumerable<GraphModel> GetGraphModels()
     {
         CheckStorageDirectory();
         
