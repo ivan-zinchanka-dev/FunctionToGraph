@@ -3,7 +3,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 
-namespace Common.Converters;
+namespace Domain.Converters;
 
 public class ColorConverter : DefaultTypeConverter
 {

@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Common.Models;
+using Domain.Models;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
 using FunctionToGraph.Services;
@@ -25,7 +25,7 @@ namespace FunctionToGraph.Views
         private readonly string _alreadyPinnedMessage;
         
         private readonly StorageService _storageService;
-        private ObservableCollection<GraphModel> _pinnedGraphModels;
+        private ObservableCollection<GraphModelOld> _pinnedGraphModels;
         
         private static class ResourceKeys
         {
@@ -50,7 +50,7 @@ namespace FunctionToGraph.Views
             
             _storageService.ReadGraphModelsAsync().ContinueWith(task =>
             {
-                _pinnedGraphModels = new ObservableCollection<GraphModel>(task.Result);
+                _pinnedGraphModels = new ObservableCollection<GraphModelOld>(task.Result);
                 _pinnedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
                 _graphsListView.ItemsSource = _pinnedGraphModels;
                 
@@ -86,7 +86,7 @@ namespace FunctionToGraph.Views
                     .OnNaN = OnNanBehaviour;
             }
             
-            foreach (GraphModel graphModel in _pinnedGraphModels)
+            foreach (GraphModelOld graphModel in _pinnedGraphModels)
             {
                 _plot.Plot.AddScatter(
                         graphModel.XValues, 
@@ -131,7 +131,7 @@ namespace FunctionToGraph.Views
             }
             else
             {
-                _pinnedGraphModels.Add(new GraphModel(
+                _pinnedGraphModels.Add(new GraphModelOld(
                     _expressionModel.ExpressionString, 
                     _expressionModel.XValues, 
                     _expressionModel.YValues, 
@@ -146,9 +146,9 @@ namespace FunctionToGraph.Views
 
         private void OnUnpinButtonClick(object sender, RoutedEventArgs e)
         {
-            List<GraphModel> selectedItems = new List<GraphModel>(_graphsListView.SelectedItems.Cast<GraphModel>());
+            List<GraphModelOld> selectedItems = new List<GraphModelOld>(_graphsListView.SelectedItems.Cast<GraphModelOld>());
 
-            foreach (GraphModel graphModel in selectedItems)
+            foreach (GraphModelOld graphModel in selectedItems)
             {
                 _pinnedGraphModels.Remove(graphModel);
             }

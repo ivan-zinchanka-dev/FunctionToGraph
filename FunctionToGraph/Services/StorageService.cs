@@ -21,7 +21,7 @@ public class StorageService
         CheckApplicationFolder();
     }
     
-    public async void SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
+    public async void SaveGraphModelsAsync(IEnumerable<GraphModelOld> graphModels)
     {
         string jsonNotation = JsonConvert.SerializeObject(graphModels, Formatting.Indented);
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
@@ -29,19 +29,19 @@ public class StorageService
         await File.WriteAllTextAsync(fullFileName, jsonNotation);
     }
     
-    public async Task<IEnumerable<GraphModel>> ReadGraphModelsAsync()
+    public async Task<IEnumerable<GraphModelOld>> ReadGraphModelsAsync()
     {
         string fullFileName = Path.Combine(_appDirectoryInfo.FullName, GraphModelsFileName);
 
         if (!File.Exists(fullFileName))
         {
-            return new List<GraphModel>();
+            return new List<GraphModelOld>();
         }
 
         string jsonNotation = await File.ReadAllTextAsync(fullFileName);
-        IEnumerable<GraphModel> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModel>>(jsonNotation);
+        IEnumerable<GraphModelOld> graphModels = JsonConvert.DeserializeObject<IEnumerable<GraphModelOld>>(jsonNotation);
 
-        return graphModels ?? new List<GraphModel>();
+        return graphModels ?? new List<GraphModelOld>();
     }
     
     private void CheckApplicationFolder()

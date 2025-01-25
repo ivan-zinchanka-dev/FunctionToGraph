@@ -1,4 +1,4 @@
-﻿namespace Common.Models
+﻿namespace Domain.Models
 {
     public struct Range
     {

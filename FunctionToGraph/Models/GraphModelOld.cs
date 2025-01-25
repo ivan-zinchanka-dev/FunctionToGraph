@@ -1,24 +1,19 @@
 ﻿using System.Drawing;
+using Newtonsoft.Json;
 
-namespace FunctionCalculator;
+namespace FunctionToGraph.Models;
 
-public class GraphModel
+// TODO Delete
+public class GraphModelOld
 {
     public string Expression { get; private set; }
     public double[] XValues { get; private set; }
     public double[] YValues { get; private set; }
     public Color Color { get; private set; }
 
-    public string FullExpression => "y=" + Expression;
+    [JsonIgnore] public string FullExpression => "y=" + Expression;
     
-    public GraphModel(string expression, double[] xValues, double[] yValues)
-    {
-        Expression = expression;
-        XValues = xValues;
-        YValues = yValues;
-    }
-    
-    public GraphModel(string expression, double[] xValues, double[] yValues, Color color)
+    public GraphModelOld(string expression, double[] xValues, double[] yValues, Color color)
     {
         Expression = expression;
         XValues = xValues;

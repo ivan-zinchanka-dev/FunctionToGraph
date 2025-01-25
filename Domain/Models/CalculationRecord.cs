@@ -1,6 +1,6 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
-namespace FunctionCalculator;
+namespace Domain.Models;
 
 [CultureInfo("InvariantCulture")]
 public class CalculationRecord

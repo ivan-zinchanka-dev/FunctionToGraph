@@ -1,4 +1,5 @@
-﻿using FunctionCalculator.Handlers;
+﻿using Domain.Models;
+using FunctionCalculator.Handlers;
 
 namespace FunctionCalculator;
 

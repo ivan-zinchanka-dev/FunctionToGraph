@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
-        xmlns:commonModels="clr-namespace:Common.Models;assembly=Common"
+        xmlns:commonModels="clr-namespace:Domain.Models;assembly=Domain"
         mc:Ignorable="d"
         Title="Function to graph" Height="550" Width="1000">
     
