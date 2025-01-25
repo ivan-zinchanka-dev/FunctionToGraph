@@ -25,8 +25,8 @@ public class StorageService
         _storageDirectory = new DirectoryInfo(Path.Combine(storageDirectoryPath, GraphsFolder));
         CheckStorageDirectory();
     }
-
-    public void SaveGraphModels(GraphModel graphModel)
+    
+    public void SaveGraphModel(GraphModel graphModel)
     {
         SaveGraphModels(new []{ graphModel });
     }

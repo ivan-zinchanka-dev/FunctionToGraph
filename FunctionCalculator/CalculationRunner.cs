@@ -21,12 +21,10 @@ public class CalculationRunner
         try
         {
             GraphModel graphModel = new ExpressionHandler().Handle(expression);
-            
-            new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
+            new CalculationResultsHandler().Handle(graphModel, outputDirectoryPath);
             
             /*StorageService ss = new StorageService(GetDefaultDirectoryPath());
-
-            var models = ss.GetGraphModelsAsync();
+            var models = ss.GetGraphModels();
 
             foreach (var model in models)
             {
