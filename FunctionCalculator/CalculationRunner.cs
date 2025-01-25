@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.Storage;
 using FunctionCalculator.Handlers;
 
 namespace FunctionCalculator;
@@ -10,7 +11,10 @@ public class CalculationRunner
     // TODO add report.metadata.json (or xaml) to report.csv 
     // TypeConverter(typeof(ColorConverter))
 
-    
+    private static string GetDefaultDirectoryPath()
+    {
+        return Directory.GetCurrentDirectory();
+    }
     
     public async void Run(string expression, string outputDirectoryPath)
     {
@@ -19,32 +23,23 @@ public class CalculationRunner
             GraphModel graphModel = new ExpressionHandler().Handle(expression);
             
             new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
+            
+            /*StorageService ss = new StorageService(GetDefaultDirectoryPath());
+
+            var models = ss.GetGraphModelsAsync();
+
+            foreach (var model in models)
+            {
+                Console.WriteLine(model.FullExpression + " " + model.XValues.Length + " " + model.YValues.Length);
+            }*/
+
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
         }
-        
-
-        /*CsvConfiguration config = CsvConfiguration.FromAttributes<CalculationRecord>();
-        
-        using (StreamReader streamReader = new StreamReader("table.csv"))
-        {
-            using (CsvReader csvReader = new CsvReader(streamReader, config))
-            {
-                IEnumerable<CalculationRecord> records = csvReader.GetRecords<CalculationRecord>();
-
-                foreach (var record in records)
-                {
-                    Console.WriteLine(record);
-                }
-            }
-        }*/
-
-        //Console.WriteLine("CSV ready");
     }
-
-
+    
     private async Task HandleErrorAsync(Exception ex)
     {
         ConsoleColor defaultColor = Console.ForegroundColor;

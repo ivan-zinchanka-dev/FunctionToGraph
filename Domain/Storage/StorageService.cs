@@ -25,14 +25,18 @@ public class StorageService
         _storageDirectory = new DirectoryInfo(Path.Combine(storageDirectoryPath, GraphsFolder));
         CheckStorageDirectory();
     }
-    
+
+    public void SaveGraphModelsAsync(GraphModel graphModel)
+    {
+        SaveGraphModelsAsync(new []{ graphModel });
+    }
+
     // TODO Async
     public void SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
     {
         CheckStorageDirectory();
         
         string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-        
         bool appendMode = GetAppendMode(graphsFilePath);
         
         CsvConfiguration csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -75,10 +79,62 @@ public class StorageService
 
         return records;
     }
-
-    public async Task<IEnumerable<GraphModel>> ReadGraphModelsAsync()
+    
+    private IEnumerable<GraphModel> ToGraphModels(IEnumerable<CalculationRecord> records)
     {
-        return null;
+        IEnumerable<IGrouping<string, CalculationRecord>> recordGroups = records.GroupBy(record => record.Expression);
+        
+        List<GraphModel> graphModels = new List<GraphModel>();
+        
+        foreach (IGrouping<string, CalculationRecord> recordGroup in recordGroups)
+        {
+            graphModels.Add(ToGraphModel(recordGroup.Key, recordGroup));
+        }
+        
+        return graphModels;
+    }
+
+    private GraphModel ToGraphModel(string recordsKey, IEnumerable<CalculationRecord> records)
+    {
+        List<CalculationRecord> recordsList = records.ToList();
+        
+        double[] xValues = new double[recordsList.Count];
+        double[] yValues = new double[recordsList.Count];
+
+        for (int i = 0; i < xValues.Length; i++)
+        {
+            xValues[i] = recordsList[i].XValue;
+        }
+        
+        for (int i = 0; i < yValues.Length; i++)
+        {
+            yValues[i] = recordsList[i].YValue;
+        }
+
+        return new GraphModel(recordsKey, xValues, yValues);
+    }
+
+    //TODO Async
+    public IEnumerable<GraphModel> GetGraphModelsAsync()
+    {
+        CheckStorageDirectory();
+        
+        string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
+        
+        CsvConfiguration csvConfig = CsvConfiguration.FromAttributes<CalculationRecord>();
+
+        IEnumerable<GraphModel> graphModel;
+        
+        using (StreamReader streamReader = new StreamReader(graphsFilePath))
+        {
+            using (CsvReader csvReader = new CsvReader(streamReader, csvConfig))
+            {
+                IEnumerable<CalculationRecord> records = csvReader.GetRecords<CalculationRecord>();
+                graphModel = ToGraphModels(records);
+            }
+        }
+        
+        return graphModel;
     }
     
     private void CheckStorageDirectory()
