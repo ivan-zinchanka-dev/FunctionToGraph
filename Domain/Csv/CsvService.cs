@@ -34,19 +34,38 @@ public class CsvService
         return data;
     }
 
+
+    private static bool MustWriteHeaders(string filePath, bool append)
+    {
+        if (append)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            return !(fileInfo.Exists && fileInfo.Length > 0);
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public void WriteData(string filePath, DataTable data, bool append = false)
     {
+        bool writeHeaders = MustWriteHeaders(filePath, append);
+        
         using (StreamWriter writer = new StreamWriter(filePath, append))
         {
-            string[] headers = new string[data.Columns.Count];
-
-            for (int i = 0; i < headers.Length; i++)
+            if (writeHeaders)
             {
-                headers[i] = data.Columns[i].ColumnName;
+                string[] headers = new string[data.Columns.Count];
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    headers[i] = data.Columns[i].ColumnName;
+                }
+            
+                writer.WriteLine(string.Join(Separator, headers));
             }
             
-            writer.WriteLine(string.Join(Separator, headers));
-
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 DataRow row = data.Rows[i];
@@ -58,6 +77,38 @@ public class CsvService
                 }
                 
                 writer.WriteLine(string.Join(Separator, fields));
+            }
+            
+            writer.Flush();
+        }
+        
+    }
+    
+    
+    public async Task WriteDataAsync(string filePath, DataTable data, bool append = false)
+    {
+        using (StreamWriter writer = new StreamWriter(filePath, append))
+        {
+            string[] headers = new string[data.Columns.Count];
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                headers[i] = data.Columns[i].ColumnName;
+            }
+            
+            await writer.WriteAsync(string.Join(Separator, headers));
+
+            for (int i = 0; i < data.Rows.Count; i++)
+            {
+                DataRow row = data.Rows[i];
+                string[] fields = new string[data.Columns.Count];
+
+                for (int j = 0; j < fields.Length; j++)
+                {
+                    fields[j] = row[j].ToString();
+                }
+                
+                await writer.WriteAsync(string.Join(Separator, fields));
             }
             
         }
