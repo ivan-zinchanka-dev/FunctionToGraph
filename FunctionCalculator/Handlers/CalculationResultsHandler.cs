@@ -5,7 +5,7 @@ namespace FunctionCalculator.Handlers;
 
 public class CalculationResultsHandler
 {
-    public void Handle(GraphModel graphModel, string outputDirectoryPath)
+    public async void Handle(GraphModel graphModel, string outputDirectoryPath)
     {
         if (graphModel == null)
         {
@@ -14,7 +14,7 @@ public class CalculationResultsHandler
         
         StorageService storageService = new StorageService(outputDirectoryPath ?? GetDefaultDirectoryPath());
         
-        storageService.SaveGraphModel(graphModel);
+        await storageService.SaveGraphModelAsync(graphModel);
     }
     
     private static string GetDefaultDirectoryPath()

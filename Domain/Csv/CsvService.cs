@@ -94,7 +94,11 @@ public class CsvService
             {
                 await writer.WriteLineAsync(string.Join(Separator, GetHeaders(data.Columns)));
             }
-            
+            else
+            {
+                await writer.WriteLineAsync();
+            }
+
             for (int i = 0; i < data.Rows.Count; i++)
             {
                 await writer.WriteLineAsync(string.Join(Separator, GetFields(data.Rows[i], data.Columns.Count)));
