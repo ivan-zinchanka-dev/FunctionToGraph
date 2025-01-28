@@ -8,14 +8,14 @@ namespace Domain.Storage;
 
 public class StorageService
 {
-    //private const string AppFolderName = "FunctionToGraph";
-
     private const string GraphsFolder = "Graphs";
-    private const string GraphModelsFileName = "graphs.csv";
-    //private static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    private const string GraphModelsFileName = "models.csv";
+    private const string GraphColorsFileName = "colors.json";
     
     private readonly DirectoryInfo _storageDirectory;
-
+    private readonly string _graphModelsFilePath;
+    private readonly GraphColorStorage _graphColorStorage;
+    
     public StorageService(string storageDirectoryPath)
     {
         if (storageDirectoryPath == null)
@@ -25,6 +25,50 @@ public class StorageService
         
         _storageDirectory = new DirectoryInfo(Path.Combine(storageDirectoryPath, GraphsFolder));
         CheckStorageDirectory();
+        
+        _graphModelsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
+        string graphColorsFilePath = Path.Combine(_storageDirectory.FullName, GraphColorsFileName);
+        
+        _graphColorStorage = new GraphColorStorage(graphColorsFilePath);
+    }
+    
+    public async Task<IEnumerable<GraphModel>> GetGraphModelsAsync()
+    {
+        FileInfo graphsFile = new FileInfo(_graphModelsFilePath);
+
+        if (graphsFile.Exists && graphsFile.Length > 0)
+        {
+            CsvReader csvReader = new CsvReader();
+            DataTable dataTable = await csvReader.ReadDataAsync(graphsFile.FullName);
+        
+            IEnumerable<GraphModel> models = GraphModelParser.Parse(dataTable);
+            await CheckGraphColorStorageAsync();
+            
+            foreach (GraphModel model in models)
+            {
+                model.Color = _graphColorStorage.GetGraphColor(model.Expression);
+            }
+            
+            return models;
+        }
+
+        return new List<GraphModel>();
+    }
+    
+    public async Task SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
+    {
+        CheckStorageDirectory();
+        await CheckGraphColorStorageAsync();
+        
+        CsvWriter csvWriter = new CsvWriter();
+        
+        foreach (GraphModel graphModel in graphModels)
+        {
+            await csvWriter.WriteDataAsync(_graphModelsFilePath, graphModel.ToDataTable(), true);
+            _graphColorStorage.SetGraphColor(graphModel.Expression, graphModel.Color);
+        }
+
+        await _graphColorStorage.SaveAsync();
     }
     
     public async Task SaveGraphModelAsync(GraphModel graphModel)
@@ -32,42 +76,19 @@ public class StorageService
         await SaveGraphModelsAsync(new []{ graphModel });
     }
     
-    public async Task SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
-    {
-        CheckStorageDirectory();
-        
-        string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-
-        CsvWriter csvWriter = new CsvWriter();
-
-        foreach (GraphModel graphModel in graphModels)
-        {
-            await csvWriter.WriteDataAsync(graphsFilePath, graphModel.ToDataTable(), true);
-        }
-    }
-    
-    public async Task<IEnumerable<GraphModel>> GetGraphModelsAsync()
-    {
-        string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-
-        FileInfo graphsFile = new FileInfo(graphsFilePath);
-
-        if (graphsFile.Exists && graphsFile.Length > 0)
-        {
-            CsvReader csvReader = new CsvReader();
-            DataTable dataTable = await csvReader.ReadDataAsync(graphsFilePath);
-        
-            return GraphModelParser.Parse(dataTable);
-        }
-
-        return new List<GraphModel>();
-    }
-    
     private void CheckStorageDirectory()
     {
         if (!_storageDirectory.Exists)
         {
             _storageDirectory.Create();
+        }
+    }
+    
+    private async Task CheckGraphColorStorageAsync()
+    {
+        if (!_graphColorStorage.IsInitialized)
+        {
+            await _graphColorStorage.InitializeAsync();
         }
     }
 }

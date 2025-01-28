@@ -2,6 +2,8 @@
 
 namespace Domain.Extensions;
 
+// TODO quotes and double quotes cases to Csv reader/writer
+// TODO Set normal culture for doubles
 public static class StringExtensions
 {
     [Pure]

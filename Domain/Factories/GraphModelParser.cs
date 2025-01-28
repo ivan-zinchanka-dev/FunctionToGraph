@@ -35,9 +35,6 @@ public static class GraphModelParser
         for (int i = 0; i < table.Rows.Count; i++)
         {
             DataRow dataRow = table.Rows[i];
-            
-            Console.WriteLine(dataRow[XHeader].ToString() + "  " + dataRow[YHeader].ToString());
-            
             records[i] = new Record(
                 dataRow[ExpressionHeader].ToString().WithoutFramingQuotes(), 
                 double.Parse(dataRow[XHeader].ToString(), ValueFormat), 
