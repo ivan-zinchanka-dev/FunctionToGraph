@@ -7,30 +7,18 @@ namespace FunctionCalculator;
 public class CalculationRunner
 {
     // TODO use params
-    // TODO use async
-    // TODO add report.metadata.json (or xaml) to report.csv 
-    // TypeConverter(typeof(ColorConverter))
 
     private static string GetDefaultDirectoryPath()
     {
         return Directory.GetCurrentDirectory();
     }
     
-    public async void Run(string expression, string outputDirectoryPath)
+    public async Task Run(string expression, string outputDirectoryPath)
     {
         try
         {
             GraphModel graphModel = new ExpressionHandler().Handle(expression);
-            new CalculationResultsHandler().Handle(graphModel, outputDirectoryPath);
-            
-            /*StorageService ss = new StorageService(GetDefaultDirectoryPath());
-            var models = ss.GetGraphModels();
-
-            foreach (var model in models)
-            {
-                Console.WriteLine(model.FullExpression + " " + model.XValues.Length + " " + model.YValues.Length);
-            }*/
-
+            await new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
         }
         catch (Exception ex)
         {

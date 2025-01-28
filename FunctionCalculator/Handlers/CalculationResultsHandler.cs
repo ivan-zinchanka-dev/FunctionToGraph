@@ -5,7 +5,7 @@ namespace FunctionCalculator.Handlers;
 
 public class CalculationResultsHandler
 {
-    public async void Handle(GraphModel graphModel, string outputDirectoryPath)
+    public async Task HandleAsync(GraphModel graphModel, string outputDirectoryPath)
     {
         if (graphModel == null)
         {

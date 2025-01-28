@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.ComponentModel.DataAnnotations;
 
 namespace FunctionCalculator;
 
@@ -11,7 +10,7 @@ public static class Program
 
         Option<string> expressionOption =
             new Option<string>("--exp", "Specifies the expression, that represents function");
-        expressionOption.IsRequired = true;
+        //expressionOption.IsRequired = true;
         
         rootCommand.AddOption(expressionOption);
         
@@ -21,7 +20,10 @@ public static class Program
 
 
         CalculationRunner calculationRunner = new CalculationRunner();
-        rootCommand.SetHandler(calculationRunner.Run, expressionOption, outputDirectoryOption);
+        rootCommand.SetHandler((Func<string, string, Task>) (async (expression, outputDirectory) =>
+        {
+            await calculationRunner.Run(expression, outputDirectory);
+        }), expressionOption, outputDirectoryOption);
         
         return await rootCommand.InvokeAsync(args);
     }
