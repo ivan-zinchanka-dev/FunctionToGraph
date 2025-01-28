@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Drawing;
 using System.Globalization;
+using Domain.Extensions;
 using Domain.Models;
 
 namespace Domain.Factories;
@@ -38,7 +39,7 @@ public static class GraphModelParser
             Console.WriteLine(dataRow[XHeader].ToString() + "  " + dataRow[YHeader].ToString());
             
             records[i] = new Record(
-                dataRow[ExpressionHeader].ToString(), 
+                dataRow[ExpressionHeader].ToString().WithoutFramingQuotes(), 
                 double.Parse(dataRow[XHeader].ToString(), ValueFormat), 
                 double.Parse(dataRow[YHeader].ToString(), ValueFormat));
         }

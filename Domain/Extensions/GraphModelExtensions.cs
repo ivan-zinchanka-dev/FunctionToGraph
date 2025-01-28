@@ -11,7 +11,6 @@ public static class GraphModelExtensions
     public static DataTable ToDataTable(this GraphModel model)
     {
         DataTable table = new DataTable();
-        table.Locale = CultureInfo.InvariantCulture;
         table.Columns.Add("Expression", typeof(string));
         table.Columns.Add("X", typeof(string));
         table.Columns.Add("Y", typeof(string));
@@ -21,7 +20,7 @@ public static class GraphModelExtensions
         for (int i = 0; i < rowsCount; i++)
         {
             table.Rows.Add(
-                model.Expression, 
+                model.Expression.WithFramingQuotes(), 
                 model.XValues[i].ToString(ValueFormat), 
                 model.YValues[i].ToString(ValueFormat));
         }
