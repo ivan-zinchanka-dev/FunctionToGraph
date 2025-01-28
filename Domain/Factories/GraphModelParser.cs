@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Drawing;
 using Domain.Models;
 
 namespace Domain.Factories;
@@ -58,6 +59,6 @@ public static class GraphModelParser
             yValues[i] = records[i].YValue;
         }
 
-        return new GraphModel(key, xValues, yValues);
+        return new GraphModel(key, xValues, yValues, Color.Red);
     }
 }

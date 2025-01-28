@@ -38,7 +38,7 @@ public class StorageService
         
         string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
 
-        CsvService csvWriter = new CsvService();
+        CsvWriter csvWriter = new CsvWriter();
 
         foreach (GraphModel graphModel in graphModels)
         {
@@ -51,7 +51,7 @@ public class StorageService
         CheckStorageDirectory();
         
         string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-        CsvService csvReader = new CsvService();
+        CsvReader csvReader = new CsvReader();
 
         DataTable dataTable = await csvReader.ReadDataAsync(graphsFilePath);
         
