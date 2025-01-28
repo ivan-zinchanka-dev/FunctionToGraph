@@ -1,10 +1,12 @@
 ﻿using System.Data;
+using System.Text.RegularExpressions;
 
 namespace Domain.Csv;
 
 public class CsvReader
 {
     private const char Separator = ',';
+    private const string RegexPattern = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     
     public DataTable ReadData(string filePath)
     {
@@ -62,7 +64,7 @@ public class CsvReader
 
     private void ReadFields(string line, DataRowCollection dataRows)
     {
-        string[] fields = line.Split(Separator);
+        string[] fields = Regex.Split(line, RegexPattern);
         dataRows.Add(fields);
     }
 }

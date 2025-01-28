@@ -62,6 +62,8 @@ public class StorageService
         
         CsvWriter csvWriter = new CsvWriter();
         
+        File.Delete(_graphModelsFilePath);
+        
         foreach (GraphModel graphModel in graphModels)
         {
             await csvWriter.WriteDataAsync(_graphModelsFilePath, graphModel.ToDataTable(), true);
