@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Drawing;
+using System.Globalization;
 using Domain.Models;
 
 namespace Domain.Factories;
@@ -9,7 +10,9 @@ public static class GraphModelParser
     private const string ExpressionHeader = "Expression";
     private const string XHeader = "X";
     private const string YHeader = "Y";
-
+    
+    private static readonly IFormatProvider ValueFormat = CultureInfo.InvariantCulture; 
+    
     private readonly struct Record
     {
         public string Expression { get; }
@@ -31,10 +34,13 @@ public static class GraphModelParser
         for (int i = 0; i < table.Rows.Count; i++)
         {
             DataRow dataRow = table.Rows[i];
+            
+            Console.WriteLine(dataRow[XHeader].ToString() + "  " + dataRow[YHeader].ToString());
+            
             records[i] = new Record(
                 dataRow[ExpressionHeader].ToString(), 
-                double.Parse(dataRow[XHeader].ToString()), 
-                double.Parse(dataRow[YHeader].ToString()));
+                double.Parse(dataRow[XHeader].ToString(), ValueFormat), 
+                double.Parse(dataRow[YHeader].ToString(), ValueFormat));
         }
 
         IEnumerable<IGrouping<string, Record>> groups = records.GroupBy(record => record.Expression);

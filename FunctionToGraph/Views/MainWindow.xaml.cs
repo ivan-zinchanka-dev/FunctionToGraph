@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Domain.Models;
+using Domain.Storage;
 using FunctionToGraph.Extensions;
 using FunctionToGraph.Models;
-using FunctionToGraph.Services;
 using ScottPlot;
 using ScottPlot.Plottable;
 using Color = System.Windows.Media.Color;
@@ -25,7 +25,7 @@ namespace FunctionToGraph.Views
         private readonly string _alreadyPinnedMessage;
         
         private readonly StorageService _storageService;
-        private ObservableCollection<GraphModelOld> _pinnedGraphModels;
+        private ObservableCollection<GraphModel> _pinnedGraphModels;
         
         private static class ResourceKeys
         {
@@ -48,9 +48,9 @@ namespace FunctionToGraph.Views
             _plot.Plot.YLabel("y");
             _plot.Plot.SetAxisLimits(DefaultPlotViewport);
             
-            _storageService.ReadGraphModelsAsync().ContinueWith(task =>
+            _storageService.GetGraphModelsAsync().ContinueWith(task =>
             {
-                _pinnedGraphModels = new ObservableCollection<GraphModelOld>(task.Result);
+                _pinnedGraphModels = new ObservableCollection<GraphModel>(task.Result);
                 _pinnedGraphModels.CollectionChanged += UpdateGraphModelsStorage;
                 _graphsListView.ItemsSource = _pinnedGraphModels;
                 
@@ -86,7 +86,7 @@ namespace FunctionToGraph.Views
                     .OnNaN = OnNanBehaviour;
             }
             
-            foreach (GraphModelOld graphModel in _pinnedGraphModels)
+            foreach (GraphModel graphModel in _pinnedGraphModels)
             {
                 _plot.Plot.AddScatter(
                         graphModel.XValues, 
@@ -131,7 +131,7 @@ namespace FunctionToGraph.Views
             }
             else
             {
-                _pinnedGraphModels.Add(new GraphModelOld(
+                _pinnedGraphModels.Add(new GraphModel(
                     _expressionModel.ExpressionString, 
                     _expressionModel.XValues, 
                     _expressionModel.YValues, 
@@ -146,9 +146,9 @@ namespace FunctionToGraph.Views
 
         private void OnUnpinButtonClick(object sender, RoutedEventArgs e)
         {
-            List<GraphModelOld> selectedItems = new List<GraphModelOld>(_graphsListView.SelectedItems.Cast<GraphModelOld>());
+            List<GraphModel> selectedItems = new List<GraphModel>(_graphsListView.SelectedItems.Cast<GraphModel>());
 
-            foreach (GraphModelOld graphModel in selectedItems)
+            foreach (GraphModel graphModel in selectedItems)
             {
                 _pinnedGraphModels.Remove(graphModel);
             }

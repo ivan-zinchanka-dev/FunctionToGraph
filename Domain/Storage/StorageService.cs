@@ -22,7 +22,7 @@ public class StorageService
         {
             throw new ArgumentNullException(nameof(storageDirectoryPath));
         }
-
+        
         _storageDirectory = new DirectoryInfo(Path.Combine(storageDirectoryPath, GraphsFolder));
         CheckStorageDirectory();
     }
@@ -46,16 +46,21 @@ public class StorageService
         }
     }
     
-    public async Task<IEnumerable<GraphModel>> GetGraphModels()
+    public async Task<IEnumerable<GraphModel>> GetGraphModelsAsync()
     {
-        CheckStorageDirectory();
-        
         string graphsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-        CsvReader csvReader = new CsvReader();
 
-        DataTable dataTable = await csvReader.ReadDataAsync(graphsFilePath);
+        FileInfo graphsFile = new FileInfo(graphsFilePath);
+
+        if (graphsFile.Exists && graphsFile.Length > 0)
+        {
+            CsvReader csvReader = new CsvReader();
+            DataTable dataTable = await csvReader.ReadDataAsync(graphsFilePath);
         
-        return GraphModelParser.Parse(dataTable);
+            return GraphModelParser.Parse(dataTable);
+        }
+
+        return new List<GraphModel>();
     }
     
     private void CheckStorageDirectory()

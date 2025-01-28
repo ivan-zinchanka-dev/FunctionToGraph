@@ -6,6 +6,8 @@ namespace Domain.Extensions;
 
 public static class GraphModelExtensions
 {
+    private static readonly IFormatProvider ValueFormat = CultureInfo.InvariantCulture; 
+    
     public static DataTable ToDataTable(this GraphModel model)
     {
         DataTable table = new DataTable();
@@ -20,8 +22,8 @@ public static class GraphModelExtensions
         {
             table.Rows.Add(
                 model.Expression, 
-                model.XValues[i].ToString(CultureInfo.InvariantCulture), 
-                model.YValues[i].ToString(CultureInfo.InvariantCulture));
+                model.XValues[i].ToString(ValueFormat), 
+                model.YValues[i].ToString(ValueFormat));
         }
         
         return table;

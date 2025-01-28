@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Windows;
-using FunctionToGraph.Services;
+using Domain.Storage;
 using FunctionToGraph.Views;
 
 namespace FunctionToGraph
@@ -11,12 +12,16 @@ namespace FunctionToGraph
         private StorageService _storageService;
         private MainWindow _mainWindow;
         
+        private const string AppFolderName = "FunctionToGraph";
+        private static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static string StorageDirectoryPath => Path.Combine(AppDataPath, AppFolderName);
+        
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             PreventMultipleStartup();
             
-            _storageService = new StorageService();
+            _storageService = new StorageService(StorageDirectoryPath);
             
             _mainWindow = new MainWindow(_storageService);
             _mainWindow.Show();
