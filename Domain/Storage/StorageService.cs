@@ -6,6 +6,7 @@ using Domain.Models;
 
 namespace Domain.Storage;
 
+//TODO Interface
 public class StorageService
 {
     private const string GraphsFolder = "Graphs";

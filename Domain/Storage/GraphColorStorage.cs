@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Domain.Storage;
 
-public class GraphColorStorage
+internal class GraphColorStorage
 {
     private readonly FileInfo _graphColorsFile;
     private Dictionary<string, Color> _graphColors = new Dictionary<string, Color>();
