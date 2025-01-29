@@ -36,7 +36,7 @@ public class CalculationRunner
         }
         else
         {
-            throw new Exception("Incorrect expression!");
+            throw new Exception($"Incorrect expression: {expression}.");
         }
     }
     

@@ -6,15 +6,15 @@ public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        RootCommand rootCommand = new RootCommand("This calculator calculates function values");
+        RootCommand rootCommand = new RootCommand("A calculator that evaluates function expressions");
 
         Option<string> expressionOption =
-            new Option<string>("--exp", "Specifies the expression, that represents function");
+            new Option<string>("--exp", "The mathematical expression to evaluate");
         expressionOption.IsRequired = true;
         rootCommand.AddOption(expressionOption);
         
         Option<string> outputDirectoryOption =
-            new Option<string>("--out", "Specifies the output directory");
+            new Option<string>("--out", "Directory where output files will be saved");
         rootCommand.AddOption(outputDirectoryOption);
         
         CalculationRunner runner = new CalculationRunner();
