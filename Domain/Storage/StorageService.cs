@@ -15,9 +15,12 @@ public class StorageService
     private readonly DirectoryInfo _storageDirectory;
     private readonly string _graphModelsFilePath;
     private readonly GraphColorStorage _graphColorStorage;
+    private readonly bool _useGraphColors;
     
-    public StorageService(string storageDirectoryPath)
+    public StorageService(string storageDirectoryPath, bool useGraphColors = true)
     {
+        _useGraphColors = useGraphColors;
+        
         if (storageDirectoryPath == null)
         {
             throw new ArgumentNullException(nameof(storageDirectoryPath));
@@ -27,9 +30,12 @@ public class StorageService
         CheckStorageDirectory();
         
         _graphModelsFilePath = Path.Combine(_storageDirectory.FullName, GraphModelsFileName);
-        string graphColorsFilePath = Path.Combine(_storageDirectory.FullName, GraphColorsFileName);
-        
-        _graphColorStorage = new GraphColorStorage(graphColorsFilePath);
+
+        if (_useGraphColors)
+        {
+            string graphColorsFilePath = Path.Combine(_storageDirectory.FullName, GraphColorsFileName);
+            _graphColorStorage = new GraphColorStorage(graphColorsFilePath);
+        }
     }
     
     public async Task<IEnumerable<GraphModel>> GetGraphModelsAsync()
@@ -42,11 +48,15 @@ public class StorageService
             DataTable dataTable = await csvReader.ReadDataAsync(graphsFile.FullName);
         
             IEnumerable<GraphModel> models = GraphModelParser.Parse(dataTable);
-            await CheckGraphColorStorageAsync();
-            
-            foreach (GraphModel model in models)
+
+            if (_useGraphColors)
             {
-                model.Color = _graphColorStorage.GetGraphColor(model.Expression);
+                await CheckGraphColorStorageAsync();
+            
+                foreach (GraphModel model in models)
+                {
+                    model.Color = _graphColorStorage.GetGraphColor(model.Expression);
+                }
             }
             
             return models;
@@ -58,7 +68,11 @@ public class StorageService
     public async Task SaveGraphModelsAsync(IEnumerable<GraphModel> graphModels)
     {
         CheckStorageDirectory();
-        await CheckGraphColorStorageAsync();
+
+        if (_useGraphColors)
+        {
+            await CheckGraphColorStorageAsync();
+        }
         
         CsvWriter csvWriter = new CsvWriter();
         
@@ -67,10 +81,17 @@ public class StorageService
         foreach (GraphModel graphModel in graphModels)
         {
             await csvWriter.WriteDataAsync(_graphModelsFilePath, graphModel.ToDataTable(), true);
-            _graphColorStorage.SetGraphColor(graphModel.Expression, graphModel.Color);
+
+            if (_useGraphColors)
+            {
+                _graphColorStorage.SetGraphColor(graphModel.Expression, graphModel.Color);
+            }
         }
 
-        await _graphColorStorage.SaveAsync();
+        if (_useGraphColors)
+        {
+            await _graphColorStorage.SaveAsync();
+        }
     }
     
     public async Task SaveGraphModelAsync(GraphModel graphModel)

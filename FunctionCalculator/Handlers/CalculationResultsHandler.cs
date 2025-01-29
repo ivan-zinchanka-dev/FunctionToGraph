@@ -12,7 +12,7 @@ public class CalculationResultsHandler
             throw new ArgumentNullException(nameof(graphModel));
         }
         
-        StorageService storageService = new StorageService(outputDirectoryPath ?? GetDefaultDirectoryPath());
+        StorageService storageService = new StorageService(outputDirectoryPath ?? GetDefaultDirectoryPath(), false);
         
         await storageService.SaveGraphModelAsync(graphModel);
     }
