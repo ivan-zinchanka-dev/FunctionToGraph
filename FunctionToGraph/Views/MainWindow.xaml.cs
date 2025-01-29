@@ -8,7 +8,6 @@ using System.Windows;
 using Domain.Models;
 using Domain.Storage;
 using FunctionToGraph.Extensions;
-using FunctionToGraph.Models;
 using ScottPlot;
 using ScottPlot.Plottable;
 using Color = System.Windows.Media.Color;
