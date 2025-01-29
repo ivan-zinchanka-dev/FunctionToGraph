@@ -10,22 +10,19 @@ public static class Program
 
         Option<string> expressionOption =
             new Option<string>("--exp", "Specifies the expression, that represents function");
-        //expressionOption.IsRequired = true;
-        
+        expressionOption.IsRequired = true;
         rootCommand.AddOption(expressionOption);
         
         Option<string> outputDirectoryOption =
             new Option<string>("--out", "Specifies the output directory");
         rootCommand.AddOption(outputDirectoryOption);
-
-
-        CalculationRunner calculationRunner = new CalculationRunner();
+        
+        CalculationRunner runner = new CalculationRunner();
         rootCommand.SetHandler((Func<string, string, Task>) (async (expression, outputDirectory) =>
         {
-            await calculationRunner.Run(expression, outputDirectory);
+            await runner.Run(expression, outputDirectory);
         }), expressionOption, outputDirectoryOption);
         
         return await rootCommand.InvokeAsync(args);
     }
-
 }

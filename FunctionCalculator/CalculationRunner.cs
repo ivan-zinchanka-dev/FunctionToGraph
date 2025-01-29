@@ -1,29 +1,48 @@
 ﻿using Domain.Models;
 using Domain.Storage;
-using FunctionCalculator.Handlers;
 
 namespace FunctionCalculator;
 
 public class CalculationRunner
 {
-    // TODO use params
-
-    private static string GetDefaultDirectoryPath()
-    {
-        return Directory.GetCurrentDirectory();
-    }
-    
     public async Task Run(string expression, string outputDirectoryPath)
     {
         try
         {
-            GraphModel graphModel = new ExpressionHandler().Handle(expression);
-            await new CalculationResultsHandler().HandleAsync(graphModel, outputDirectoryPath);
+            GraphModel graphModel = CreateGraphModel(expression);
+            
+            StorageService storageService = new StorageService(outputDirectoryPath ?? GetDefaultDirectoryPath(), false);
+            await storageService.SaveGraphModelAsync(graphModel);
+            
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
         }
+    }
+    
+    private GraphModel CreateGraphModel(string expression)
+    {
+        ExpressionModel expressionModel = new ExpressionModel(expression);
+        
+        bool result = expressionModel.TryValidate(out string errorMessage);
+
+        if (result)
+        {
+            return new GraphModel(
+                expressionModel.FullExpressionString,
+                expressionModel.XValues,
+                expressionModel.YValues);
+        }
+        else
+        {
+            throw new Exception("Incorrect expression!");
+        }
+    }
+    
+    private static string GetDefaultDirectoryPath()
+    {
+        return Directory.GetCurrentDirectory();
     }
     
     private async Task HandleErrorAsync(Exception ex)
