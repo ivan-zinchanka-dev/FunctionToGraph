@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Domain.Csv;
+using Domain.CsvService;
 using Domain.Extensions;
 using Domain.Factories;
 using Domain.Models;
@@ -45,8 +45,7 @@ public class StorageService
 
         if (graphsFile.Exists && graphsFile.Length > 0)
         {
-            CsvReader csvReader = new CsvReader();
-            DataTable dataTable = await csvReader.ReadDataAsync(graphsFile.FullName);
+            DataTable dataTable = await CsvReader.ReadDataAsync(graphsFile.FullName);
         
             IEnumerable<GraphModel> models = GraphModelParser.Parse(dataTable);
 
@@ -75,13 +74,11 @@ public class StorageService
             await CheckGraphColorStorageAsync();
         }
         
-        CsvWriter csvWriter = new CsvWriter();
-        
         File.Delete(_graphModelsFilePath);
         
         foreach (GraphModel graphModel in graphModels)
         {
-            await csvWriter.WriteDataAsync(_graphModelsFilePath, graphModel.ToDataTable(), true);
+            await CsvWriter.WriteDataAsync(_graphModelsFilePath, graphModel.ToDataTable(), true);
 
             if (_useGraphColors)
             {

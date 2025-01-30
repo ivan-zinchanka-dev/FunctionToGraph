@@ -2,14 +2,14 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Domain.Csv;
+namespace Domain.CsvService;
 
-public class CsvReader
+public static class CsvReader
 {
     private const char Separator = ',';
     private const string RegexPattern = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     
-    public DataTable ReadData(string filePath)
+    public static DataTable ReadData(string filePath)
     {
         DataTable data = new DataTable();
         
@@ -31,7 +31,7 @@ public class CsvReader
         return data;
     }
     
-    public async Task<DataTable> ReadDataAsync(string filePath)
+    public static async Task<DataTable> ReadDataAsync(string filePath)
     {
         DataTable data = new DataTable();
         
@@ -53,7 +53,7 @@ public class CsvReader
         return data;
     }
     
-    private void ReadHeaders(string line, DataColumnCollection dataColumns)
+    private static void ReadHeaders(string line, DataColumnCollection dataColumns)
     {
         string[] headers = RemoveDoubledInnerQuotesIfNeed(
             RemoveOuterQuotes(line.Split(Separator)));
@@ -64,29 +64,29 @@ public class CsvReader
         }
     }
 
-    private void ReadFields(string line, DataRowCollection dataRows)
+    private static void ReadFields(string line, DataRowCollection dataRows)
     {
         string[] fields = RemoveDoubledInnerQuotesIfNeed(
             RemoveOuterQuotes(Regex.Split(line, RegexPattern)));
         dataRows.Add(fields);
     }
     
-    private string[] RemoveOuterQuotes(string[] sources)
+    private static string[] RemoveOuterQuotes(string[] sources)
     {
         return sources.Select(RemoveOuterQuotes).ToArray();
     }
     
-    private string RemoveOuterQuotes(string source)
+    private static string RemoveOuterQuotes(string source)
     {
         return source.Trim('"');
     }
     
-    private string[] RemoveDoubledInnerQuotesIfNeed(string[] sources)
+    private static string[] RemoveDoubledInnerQuotesIfNeed(string[] sources)
     {
         return sources.Select(RemoveDoubledInnerQuotesIfNeed).ToArray();
     }
     
-    private string RemoveDoubledInnerQuotesIfNeed(string source)
+    private static string RemoveDoubledInnerQuotesIfNeed(string source)
     {
         if (source == null)
         {

@@ -1,13 +1,13 @@
 ﻿using System.Data;
 using System.Text;
 
-namespace Domain.Csv;
+namespace Domain.CsvService;
 
-public class CsvWriter
+public static class CsvWriter
 {
     private const char Separator = ',';
     
-    public void WriteData(string filePath, DataTable data, bool append = false)
+    public static void WriteData(string filePath, DataTable data, bool append = false)
     {
         bool writeHeaders = MustWriteHeaders(filePath, append);
         
@@ -25,7 +25,7 @@ public class CsvWriter
         }
     }
     
-    public async Task WriteDataAsync(string filePath, DataTable data, bool append = false)
+    public static async Task WriteDataAsync(string filePath, DataTable data, bool append = false)
     {
         bool writeHeaders = MustWriteHeaders(filePath, append);
         
@@ -43,19 +43,19 @@ public class CsvWriter
         }
     }
 
-    private string GetHeaderLine(DataColumnCollection columns)
+    private static string GetHeaderLine(DataColumnCollection columns)
     {
         return string.Join(Separator, AddOuterQuotes(
             DoubleInnerQuotesIfNeed(GetHeaders(columns))));
     }
 
-    private string GetFieldLine(DataRow row, int columnsCount)
+    private static string GetFieldLine(DataRow row, int columnsCount)
     {
         return string.Join(Separator, AddOuterQuotes(
             DoubleInnerQuotesIfNeed(GetFields(row, columnsCount))));
     }
     
-    private bool MustWriteHeaders(string filePath, bool append)
+    private static bool MustWriteHeaders(string filePath, bool append)
     {
         if (append)
         {
@@ -68,7 +68,7 @@ public class CsvWriter
         }
     }
     
-    private string[] GetHeaders(DataColumnCollection dataColumns)
+    private static string[] GetHeaders(DataColumnCollection dataColumns)
     {
         string[] headers = new string[dataColumns.Count];
 
@@ -80,7 +80,7 @@ public class CsvWriter
         return headers;
     }
     
-    private string[] GetFields(DataRow dataRow, int columnsCount)
+    private static string[] GetFields(DataRow dataRow, int columnsCount)
     {
         string[] fields = new string[columnsCount];
 
@@ -92,22 +92,22 @@ public class CsvWriter
         return fields;
     }
 
-    private string[] AddOuterQuotes(string[] sources)
+    private static string[] AddOuterQuotes(string[] sources)
     {
         return sources.Select(AddOuterQuotes).ToArray();
     }
     
-    private string AddOuterQuotes(string source)
+    private static string AddOuterQuotes(string source)
     {
         return $"\"{source}\"";
     }
 
-    private string[] DoubleInnerQuotesIfNeed(string[] sources)
+    private static string[] DoubleInnerQuotesIfNeed(string[] sources)
     {
         return sources.Select(DoubleInnerQuotesIfNeed).ToArray();
     }
 
-    private string DoubleInnerQuotesIfNeed(string source)
+    private static string DoubleInnerQuotesIfNeed(string source)
     {
         if (source == null)
         {
