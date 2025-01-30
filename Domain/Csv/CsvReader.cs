@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Domain.Csv;
@@ -54,7 +55,8 @@ public class CsvReader
     
     private void ReadHeaders(string line, DataColumnCollection dataColumns)
     {
-        string[] headers = RemoveQuotes(line.Split(Separator));
+        string[] headers = RemoveDoubledInnerQuotesIfNeed(
+            RemoveOuterQuotes(line.Split(Separator)));
 
         foreach (string header in headers)
         {
@@ -64,18 +66,50 @@ public class CsvReader
 
     private void ReadFields(string line, DataRowCollection dataRows)
     {
-        string[] fields = RemoveQuotes(Regex.Split(line, RegexPattern));
+        string[] fields = RemoveDoubledInnerQuotesIfNeed(
+            RemoveOuterQuotes(Regex.Split(line, RegexPattern)));
         dataRows.Add(fields);
     }
     
-    private string[] RemoveQuotes(string[] sources)
+    private string[] RemoveOuterQuotes(string[] sources)
     {
-        return sources.Select(RemoveQuotes).ToArray();
+        return sources.Select(RemoveOuterQuotes).ToArray();
     }
     
-    private string RemoveQuotes(string source)
+    private string RemoveOuterQuotes(string source)
     {
         return source.Trim('"');
+    }
+    
+    private string[] RemoveDoubledInnerQuotesIfNeed(string[] sources)
+    {
+        return sources.Select(RemoveDoubledInnerQuotesIfNeed).ToArray();
+    }
+    
+    private string RemoveDoubledInnerQuotesIfNeed(string source)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        StringBuilder result = new StringBuilder(source.Length);
+        bool lastWasQuote = false;
+        
+        foreach (char c in source)
+        {
+            if (c == '"' && lastWasQuote)
+            {
+                lastWasQuote = false;
+            }
+            else
+            {
+                result.Append(c);
+                lastWasQuote = (c == '"');
+            }
+        }
+
+        return result.ToString();
     }
     
 }

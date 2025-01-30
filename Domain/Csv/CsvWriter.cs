@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Text;
 
 namespace Domain.Csv;
 
@@ -44,12 +45,14 @@ public class CsvWriter
 
     private string GetHeaderLine(DataColumnCollection columns)
     {
-        return string.Join(Separator, AddQuotes(GetHeaders(columns)));
+        return string.Join(Separator, AddOuterQuotes(
+            DoubleInnerQuotesIfNeed(GetHeaders(columns))));
     }
 
     private string GetFieldLine(DataRow row, int columnsCount)
     {
-        return string.Join(Separator, AddQuotes(GetFields(row, columnsCount)));
+        return string.Join(Separator, AddOuterQuotes(
+            DoubleInnerQuotesIfNeed(GetFields(row, columnsCount))));
     }
     
     private bool MustWriteHeaders(string filePath, bool append)
@@ -89,13 +92,40 @@ public class CsvWriter
         return fields;
     }
 
-    private string[] AddQuotes(string[] sources)
+    private string[] AddOuterQuotes(string[] sources)
     {
-        return sources.Select(AddQuotes).ToArray();
+        return sources.Select(AddOuterQuotes).ToArray();
     }
     
-    private string AddQuotes(string source)
+    private string AddOuterQuotes(string source)
     {
         return $"\"{source}\"";
+    }
+
+    private string[] DoubleInnerQuotesIfNeed(string[] sources)
+    {
+        return sources.Select(DoubleInnerQuotesIfNeed).ToArray();
+    }
+
+    private string DoubleInnerQuotesIfNeed(string source)
+    {
+        if (source == null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        StringBuilder result = new StringBuilder(source.Length);
+        
+        foreach (char c in source)
+        {
+            result.Append(c);
+            
+            if (c == '"')
+            {
+                result.Append('"');
+            }
+        }
+
+        return result.ToString();
     }
 }
