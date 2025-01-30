@@ -20,7 +20,7 @@ public static class GraphModelExtensions
         for (int i = 0; i < rowsCount; i++)
         {
             table.Rows.Add(
-                model.Expression.WithFramingQuotes(), 
+                model.Expression, 
                 model.XValues[i].ToString(ValueFormat), 
                 model.YValues[i].ToString(ValueFormat));
         }

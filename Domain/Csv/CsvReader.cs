@@ -54,7 +54,7 @@ public class CsvReader
     
     private void ReadHeaders(string line, DataColumnCollection dataColumns)
     {
-        string[] headers = line.Split(Separator);
+        string[] headers = RemoveQuotes(line.Split(Separator));
 
         foreach (string header in headers)
         {
@@ -64,7 +64,18 @@ public class CsvReader
 
     private void ReadFields(string line, DataRowCollection dataRows)
     {
-        string[] fields = Regex.Split(line, RegexPattern);
+        string[] fields = RemoveQuotes(Regex.Split(line, RegexPattern));
         dataRows.Add(fields);
     }
+    
+    private string[] RemoveQuotes(string[] sources)
+    {
+        return sources.Select(RemoveQuotes).ToArray();
+    }
+    
+    private string RemoveQuotes(string source)
+    {
+        return source.Trim('"');
+    }
+    
 }

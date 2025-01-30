@@ -44,12 +44,12 @@ public class CsvWriter
 
     private string GetHeaderLine(DataColumnCollection columns)
     {
-        return string.Join(Separator, GetHeaders(columns));
+        return string.Join(Separator, AddQuotes(GetHeaders(columns)));
     }
 
     private string GetFieldLine(DataRow row, int columnsCount)
     {
-        return string.Join(Separator, GetFields(row, columnsCount));
+        return string.Join(Separator, AddQuotes(GetFields(row, columnsCount)));
     }
     
     private bool MustWriteHeaders(string filePath, bool append)
@@ -87,5 +87,15 @@ public class CsvWriter
         }
         
         return fields;
+    }
+
+    private string[] AddQuotes(string[] sources)
+    {
+        return sources.Select(AddQuotes).ToArray();
+    }
+    
+    private string AddQuotes(string source)
+    {
+        return $"\"{source}\"";
     }
 }
