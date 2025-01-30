@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Domain.Models;
-using Domain.Storage;
+using Domain.Storage.Contracts;
 using FunctionToGraph.Extensions;
 using ScottPlot;
 using ScottPlot.Plottable;
@@ -23,7 +23,7 @@ namespace FunctionToGraph.Views
         private Color _graphColor;
         private readonly string _alreadyPinnedMessage;
         
-        private readonly StorageService _storageService;
+        private readonly IStorageService _storageService;
         private ObservableCollection<GraphModel> _pinnedGraphModels;
         
         private static class ResourceKeys
@@ -33,7 +33,7 @@ namespace FunctionToGraph.Views
             public const string AlreadyPinnedMessageKey = "AlreadyPinnedMessage";
         }
         
-        public MainWindow(StorageService storageService)
+        public MainWindow(IStorageService storageService)
         {
             _storageService = storageService;
             

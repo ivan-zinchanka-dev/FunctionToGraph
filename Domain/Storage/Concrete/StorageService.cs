@@ -3,11 +3,11 @@ using Domain.CsvService;
 using Domain.Extensions;
 using Domain.Factories;
 using Domain.Models;
+using Domain.Storage.Contracts;
 
-namespace Domain.Storage;
+namespace Domain.Storage.Concrete;
 
-//TODO Interface
-public class StorageService
+public class StorageService : IStorageService
 {
     private const string GraphsFolder = "Graphs";
     private const string GraphModelsFileName = "models.csv";

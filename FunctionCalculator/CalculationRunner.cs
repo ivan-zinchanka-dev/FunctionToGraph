@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Domain.Storage;
+using Domain.Storage.Concrete;
 
 namespace FunctionCalculator;
 

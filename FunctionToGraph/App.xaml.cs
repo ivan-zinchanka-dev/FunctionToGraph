@@ -2,14 +2,15 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Domain.Storage;
+using Domain.Storage.Concrete;
+using Domain.Storage.Contracts;
 using FunctionToGraph.Views;
 
 namespace FunctionToGraph
 {
     public partial class App : Application
     {
-        private StorageService _storageService;
+        private IStorageService _storageService;
         private MainWindow _mainWindow;
         
         private const string AppFolderName = "FunctionToGraph";
