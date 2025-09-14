@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Domain.CsvService;
+namespace FunctionDomain.CsvService;
 
 public static class CsvReader
 {

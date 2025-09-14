@@ -2,8 +2,8 @@
 using System.IO;
 using System.Threading;
 using System.Windows;
-using Domain.Storage.Concrete;
-using Domain.Storage.Contracts;
+using FunctionDomain.Storage.Concrete;
+using FunctionDomain.Storage.Contracts;
 using FunctionToGraph.Views;
 
 namespace FunctionToGraph

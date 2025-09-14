@@ -1,10 +1,10 @@
-﻿namespace Domain.Models
+﻿namespace FunctionDomain.Models
 {
     public struct Range
     {
-        public double Min { get; private set; }
-        public double Max { get; private set; }
-        public int Count { get; private set; }
+        public double Min { get; }
+        public double Max { get; }
+        public int Count { get; }
 
         public Range(double min, double max, int count)
         {

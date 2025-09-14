@@ -2,7 +2,7 @@
 using System.Globalization;
 using NCalc;
 
-namespace Domain.Models
+namespace FunctionDomain.Models
 {
     public class ExpressionModel : IDataErrorInfo
     {

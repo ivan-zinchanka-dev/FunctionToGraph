@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Text;
 
-namespace Domain.CsvService;
+namespace FunctionDomain.CsvService;
 
 public static class CsvWriter
 {

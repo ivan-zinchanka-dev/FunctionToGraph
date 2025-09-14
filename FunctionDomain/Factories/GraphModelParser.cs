@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Globalization;
-using Domain.Models;
+using FunctionDomain.Models;
 
-namespace Domain.Factories;
+namespace FunctionDomain.Factories;
 
 public static class GraphModelParser
 {

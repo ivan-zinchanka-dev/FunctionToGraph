@@ -5,8 +5,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
-        Title="" Height="450" Width="290"
-        WindowStartupLocation="Manual" Top="200" Left="800">
+        Title="Color picker" 
+        Height="450" Width="290"
+        WindowStartupLocation="Manual" 
+        Top="200" Left="800">
     <StackPanel>
         <colorpicker:StandardColorPicker 
             x:FieldModifier="private" 

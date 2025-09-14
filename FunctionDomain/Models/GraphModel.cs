@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.Contracts;
 using System.Drawing;
 
-namespace Domain.Models;
+namespace FunctionDomain.Models;
 
 public class GraphModel
 {

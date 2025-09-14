@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\FunctionDomain\FunctionDomain.csproj" />
     </ItemGroup>
 
 </Project>

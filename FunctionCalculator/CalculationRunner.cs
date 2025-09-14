@@ -1,5 +1,5 @@
-﻿using Domain.Models;
-using Domain.Storage.Concrete;
+﻿using FunctionDomain.Models;
+using FunctionDomain.Storage.Concrete;
 
 namespace FunctionCalculator;
 

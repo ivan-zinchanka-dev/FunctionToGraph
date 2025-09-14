@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Globalization;
-using Domain.Models;
+using FunctionDomain.Models;
 
-namespace Domain.Extensions;
+namespace FunctionDomain.Extensions;
 
 public static class GraphModelExtensions
 {

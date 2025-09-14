@@ -1,6 +1,6 @@
-﻿using Domain.Models;
+﻿using FunctionDomain.Models;
 
-namespace Domain.Storage.Contracts;
+namespace FunctionDomain.Storage.Contracts;
 
 public interface IStorageService
 {

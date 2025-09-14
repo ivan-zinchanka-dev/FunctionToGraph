@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:system="clr-namespace:System;assembly=System.Runtime"
         xmlns:scottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
-        xmlns:commonModels="clr-namespace:Domain.Models;assembly=Domain"
+        xmlns:commonModels="clr-namespace:FunctionDomain.Models;assembly=FunctionDomain"
         mc:Ignorable="d"
-        Title="Function to graph" Height="550" Width="1000">
+        Title="Function to graph" 
+        Height="550" Width="1000">
     
     <Window.Resources>
         <commonModels:ExpressionModel x:Key="ExpressionModel" ExpressionString="-0.02*Pow(x, 3)" />
@@ -79,8 +80,10 @@
             <GroupBox Header="Pinned graphs" Style="{StaticResource GroupBoxStyle}">
                 <StackPanel>
                     <Grid>
-                        <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto">
-                            <ListBox x:FieldModifier="private" x:Name="_graphsListView"/>
+                        <ScrollViewer Height="100" 
+                                      VerticalScrollBarVisibility="Auto">
+                            <ListBox x:FieldModifier="private" 
+                                     x:Name="_graphsListView"/>
                         </ScrollViewer>
                     </Grid>
                     <Grid>
@@ -97,7 +100,8 @@
                 </StackPanel>
             </GroupBox>
             
-            <GroupBox Header="Tutorial" Style="{StaticResource GroupBoxStyle}">
+            <GroupBox Header="Tutorial" 
+                      Style="{StaticResource GroupBoxStyle}">
                 <Grid>
                     <TextBlock 
                         Text="{StaticResource Tutorial}"

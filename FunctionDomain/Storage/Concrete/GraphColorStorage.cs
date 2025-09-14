@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Newtonsoft.Json;
 
-namespace Domain.Storage.Concrete;
+namespace FunctionDomain.Storage.Concrete;
 
 internal class GraphColorStorage
 {
@@ -22,7 +22,7 @@ internal class GraphColorStorage
 
     public Color GetGraphColor(string expression)
     {
-        return _graphColors.TryGetValue(expression, out Color color) ? color : default;
+        return _graphColors.GetValueOrDefault(expression);
     }
     
     public void SetGraphColor(string expression, Color color)
