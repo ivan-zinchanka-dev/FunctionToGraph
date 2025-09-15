@@ -5,7 +5,6 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>disable</Nullable>
         <UseWPF>true</UseWPF>
-        
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,4 +25,23 @@
       <ProjectReference Include="..\FunctionDomain\FunctionDomain.csproj" />
     </ItemGroup>
 
+    <Target Name="BuildConfigEditor" BeforeTargets="CopyFromOtherApp">
+        <MSBuild Projects="..\FunctionCalculator\FunctionCalculator.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration)" />
+    </Target>
+
+    <Target Name="CopyFromOtherApp" AfterTargets="Build">
+        <PropertyGroup>
+            <ConfigEditorBinPath>..\FunctionCalculator\bin\$(Configuration)\</ConfigEditorBinPath>
+        </PropertyGroup>
+        <ItemGroup>
+            <ConfigEditorFiles Include="$(ConfigEditorBinPath)**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(ConfigEditorFiles)"
+              DestinationFolder="$(OutputPath)"
+              SkipUnchangedFiles="true"
+              OverwriteReadOnlyFiles="false" />
+    </Target>
+    
 </Project>
